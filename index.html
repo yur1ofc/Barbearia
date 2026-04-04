@@ -2,21 +2,26 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>RHD Cortes | Barbearia Premium - Barreiras BA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RHD Cortes | Barbearia Premium</title>
+  <meta name="description" content="RHD Cortes - Barbearia em Barreiras BA. Cortes precisos, barba impecável, experiência premium.">
   
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
   
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Barlow:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
+    /* ===== BASE STYLES ===== */
     :root {
-      --gold: #D4AF37;
-      --gold-dark: #B8960F;
-      --gold-light: #FFD700;
+      --gold: #C9A84C;
+      --gold-light: #E2C06B;
+      --gold-dark: #9A7A30;
       --black: #0A0A0A;
       --dark: #111111;
       --dark2: #1A1A1A;
@@ -24,299 +29,75 @@
       --gray: #888888;
       --light: #F5F0E8;
       --white: #FFFFFF;
-      --danger: #DC2626;
-      --success: #10B981;
-      --warning: #F59E0B;
+      --danger: #e74c3c;
+      --success: #27ae60;
+      --warning: #f39c12;
     }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'Barlow', sans-serif;
       background: var(--black);
       color: var(--light);
       overflow-x: hidden;
     }
-
-    /* Admin Panel Styles */
-    .admin-login-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.95);
-      z-index: 10000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(10px);
-    }
-    
-    .admin-login-box {
-      background: var(--dark2);
-      padding: 48px;
-      border-radius: 4px;
-      width: 90%;
-      max-width: 420px;
-      border: 1px solid rgba(212,175,55,0.3);
-    }
-    
-    .admin-login-box h2 {
-      font-family: 'Playfair Display', serif;
-      color: var(--gold);
-      margin-bottom: 32px;
-      text-align: center;
-    }
-    
-    .admin-login-box input {
-      width: 100%;
-      background: var(--dark);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 14px;
-      color: var(--light);
-      margin-bottom: 16px;
-      font-family: 'Barlow', sans-serif;
-    }
-    
-    .admin-login-box button {
-      width: 100%;
-      background: var(--gold);
-      color: var(--black);
-      border: none;
-      padding: 14px;
-      font-weight: 700;
-      text-transform: uppercase;
-      cursor: pointer;
-      font-family: 'Barlow', sans-serif;
-    }
-    
-    .admin-panel {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 9999;
-    }
-    
-    .admin-toggle {
-      width: 56px;
-      height: 56px;
+    body { cursor: none; }
+    #cursor, #cursor-ring { display: block; }
+    #cursor {
+      width: 10px; height: 10px;
       background: var(--gold);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(212,175,55,0.4);
-      font-size: 24px;
-      border: none;
-      color: var(--black);
-    }
-    
-    .admin-sidebar {
-      position: fixed;
-      top: 0;
-      right: -400px;
-      width: 380px;
-      height: 100vh;
-      background: var(--dark2);
-      z-index: 10001;
-      transition: right 0.3s ease;
-      padding: 24px;
-      overflow-y: auto;
-      border-left: 2px solid var(--gold);
-    }
-    
-    .admin-sidebar.open {
-      right: 0;
-    }
-    
-    .admin-sidebar h3 {
-      color: var(--gold);
-      margin-bottom: 24px;
-      font-family: 'Playfair Display', serif;
-    }
-    
-    .admin-sidebar .close-admin {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: none;
-      border: none;
-      color: var(--gold);
-      font-size: 24px;
-      cursor: pointer;
-    }
-    
-    .admin-section {
-      margin-bottom: 32px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    .admin-section h4 {
-      margin-bottom: 16px;
-      color: var(--light);
-    }
-    
-    .service-price-edit {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      padding: 8px;
-      background: var(--dark);
-    }
-    
-    .service-price-edit span {
-      flex: 1;
-    }
-    
-    .service-price-edit input {
-      width: 100px;
-      background: var(--dark3);
-      border: 1px solid rgba(212,175,55,0.3);
-      color: var(--gold);
-      padding: 6px 10px;
-      text-align: right;
-    }
-    
-    .promo-input {
-      width: 100%;
-      background: var(--dark);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 12px;
-      color: var(--light);
-      margin-bottom: 12px;
-    }
-    
-    .mode-toggle {
-      background: var(--dark);
-      padding: 16px;
-      border-radius: 4px;
-      margin-bottom: 16px;
-    }
-    
-    .mode-toggle label {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-    }
-    
-    .mode-toggle input {
-      width: 50px;
-      height: 26px;
-      appearance: none;
-      background: var(--dark3);
-      border-radius: 13px;
-      position: relative;
-      cursor: pointer;
-    }
-    
-    .mode-toggle input:checked {
-      background: var(--warning);
-    }
-    
-    .mode-toggle input::before {
-      content: '';
-      width: 22px;
-      height: 22px;
-      background: var(--gold);
-      border-radius: 50%;
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      transition: transform 0.3s;
-    }
-    
-    .mode-toggle input:checked::before {
-      transform: translateX(24px);
-    }
-    
-    .btn-save {
-      background: var(--gold);
-      color: var(--black);
-      border: none;
-      padding: 12px 24px;
-      font-weight: 700;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 12px;
-    }
-    
-    .logout-btn {
-      background: var(--danger);
-      color: white;
-      width: 100%;
-      padding: 12px;
-      border: none;
-      cursor: pointer;
-      margin-top: 16px;
-    }
-    
-    /* Booking disabled warning */
-    .booking-disabled-warning {
-      background: var(--danger);
-      color: white;
-      text-align: center;
-      padding: 12px;
-      position: fixed;
-      top: 80px;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      font-weight: 700;
-      display: none;
-    }
-    
-    .booking-disabled-warning.show {
-      display: block;
-    }
-    
-    .btn-primary.disabled, .btn-form.disabled, .nav-cta.disabled {
-      opacity: 0.5;
+      position: fixed; top: 0; left: 0;
       pointer-events: none;
-      cursor: not-allowed;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, width 0.2s, height 0.2s;
     }
-    
-    /* Rest of original styles */
+    #cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(201,168,76,0.5);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 99998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
+    }
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--dark); }
     ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
-
+    
+    /* ===== NAV ===== */
     nav {
       position: fixed; top: 0; left: 0; right: 0;
       z-index: 1000;
-      padding: 20px 60px;
+      padding: 24px 60px;
       display: flex; align-items: center; justify-content: space-between;
       transition: all 0.4s ease;
+    }
+    nav.scrolled {
       background: rgba(10,10,10,0.95);
+      padding: 16px 60px;
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(212,175,55,0.15);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
     }
-    
     .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-    
-    .nav-logo img {
-      height: 45px;
-      width: auto;
-    }
-    
-    .logo-text {
       font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
       font-weight: 700;
       color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    
-    .logo-text span { color: var(--white); }
-    
+    .logo-img {
+      height: 45px;
+      width: auto;
+      border-radius: 8px;
+    }
+    .nav-logo span { color: var(--white); }
     .nav-links { display: flex; gap: 36px; list-style: none; }
     .nav-links a {
       color: rgba(245,240,232,0.7);
@@ -344,657 +125,438 @@
       background: var(--gold);
       color: var(--black);
     }
-    
-    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
-    .hamburger span { display: block; width: 26px; height: 2px; background: var(--gold); }
-
-    #hero {
-      height: 100vh;
-      position: relative;
-      display: flex;
-      align-items: center;
-      margin-top: 85px;
-    }
-    .hero-bg {
-      position: absolute; inset: 0;
-      background: 
-        linear-gradient(135deg, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.6) 60%, rgba(10,10,10,0.85) 100%),
-        url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1800&q=80') center/cover no-repeat;
-    }
-    .hero-content {
-      position: relative;
-      padding: 0 60px;
-      max-width: 780px;
-    }
-    .hero-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 28px;
-    }
-    .hero-label::before, .hero-label::after {
-      content: '';
-      display: block;
-      width: 40px;
-      height: 1px;
-      background: var(--gold);
-    }
-    .hero-label span {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
-    .hero-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(3rem, 7vw, 5.5rem);
-      font-weight: 900;
-      line-height: 1.0;
-      margin-bottom: 24px;
-    }
-    .hero-title em {
-      font-style: italic;
-      color: var(--gold);
-      display: block;
-    }
-    .hero-subtitle {
-      font-size: 1rem;
-      font-weight: 300;
-      color: rgba(245,240,232,0.7);
-      line-height: 1.7;
-      max-width: 480px;
-      margin-bottom: 48px;
-    }
-    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
-    .btn-primary {
+    .admin-btn {
       background: var(--gold);
       color: var(--black);
-      padding: 14px 36px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-decoration: none;
-      display: inline-block;
-      transition: all 0.3s;
-      cursor: pointer;
       border: none;
+      padding: 8px 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 15px;
     }
-    .btn-primary:hover:not(.disabled) {
-      background: var(--gold-light);
-      transform: translateY(-2px);
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
     }
-    .btn-secondary {
-      border: 1px solid rgba(245,240,232,0.3);
-      color: var(--light);
-      padding: 14px 36px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-decoration: none;
-      display: inline-block;
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--gold);
       transition: all 0.3s;
     }
-
-    section { padding: 80px 60px; }
-    .section-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
+    
+    /* ===== ADMIN PANEL ===== */
+    .admin-panel {
+      position: fixed;
+      top: 0;
+      right: -500px;
+      width: 500px;
+      height: 100vh;
+      background: var(--dark2);
+      z-index: 10000;
+      transition: right 0.3s ease;
+      box-shadow: -5px 0 30px rgba(0,0,0,0.5);
+      overflow-y: auto;
+      border-left: 2px solid var(--gold);
     }
-    .section-label::before {
-      content: '';
-      display: block;
-      width: 30px;
-      height: 1px;
+    .admin-panel.open {
+      right: 0;
+    }
+    .admin-header {
       background: var(--gold);
-    }
-    .section-label span {
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 700;
-      line-height: 1.15;
-    }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      margin-top: 48px;
-    }
-    .service-card {
-      background: var(--dark2);
-      padding: 36px 30px;
-      position: relative;
-      transition: all 0.4s ease;
-    }
-    .service-card:hover { background: var(--dark3); }
-    .service-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem;
-      margin-bottom: 12px;
-      color: var(--white);
-    }
-    .service-card p {
-      font-size: 0.83rem;
-      color: rgba(245,240,232,0.5);
-      line-height: 1.7;
-      margin-bottom: 24px;
-    }
-    .service-price {
+      padding: 20px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-    }
-    .price {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--gold);
-    }
-    .price-from {
-      font-size: 0.65rem;
-      color: rgba(245,240,232,0.4);
-      text-transform: uppercase;
-      display: block;
-    }
-    .promo-badge {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: var(--warning);
-      color: var(--black);
-      padding: 4px 10px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      border-radius: 20px;
-    }
-
-    #agendamento {
-      background: var(--dark);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
       align-items: center;
     }
-    .booking-form {
-      background: var(--dark2);
-      padding: 40px;
+    .admin-header h2 {
+      color: var(--black);
+      font-size: 1.3rem;
     }
-    .form-title {
-      font-family: 'Playfair Display', serif;
+    .close-admin {
+      background: none;
+      border: none;
       font-size: 1.5rem;
-      margin-bottom: 32px;
+      cursor: pointer;
+      color: var(--black);
     }
-    .form-group { margin-bottom: 20px; }
-    .form-group label {
-      display: block;
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+    .admin-content {
+      padding: 24px;
+    }
+    .admin-section {
+      margin-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 24px;
+    }
+    .admin-section h3 {
       color: var(--gold);
+      margin-bottom: 16px;
+      font-size: 1.1rem;
+    }
+    .service-item-admin {
+      background: var(--dark3);
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+    }
+    .service-item-admin input {
+      width: 100%;
+      background: var(--dark);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--light);
+      padding: 8px 12px;
       margin-bottom: 8px;
     }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%;
-      background: var(--dark);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: var(--light);
-      padding: 12px 16px;
-      font-family: 'Barlow', sans-serif;
-      font-size: 0.9rem;
-      outline: none;
+    .promo-card {
+      background: var(--gold-dark);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
     }
-    .form-group input:focus, .form-group select:focus {
-      border-color: var(--gold);
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
     }
-    .btn-form {
-      width: 100%;
-      background: var(--gold);
-      color: var(--black);
-      border: none;
-      padding: 14px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
       cursor: pointer;
-      transition: background 0.3s;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.3s;
+      border-radius: 34px;
     }
-
-    .map-container {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      min-height: 450px;
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
     }
-    .map-info {
+    input:checked + .slider {
+      background-color: var(--gold);
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    .walkin-status {
+      background: var(--dark3);
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .walkin-active {
+      color: var(--warning);
+      font-weight: bold;
+    }
+    .btn-save {
       background: var(--gold);
-      padding: 48px;
-    }
-    .map-info h2 {
-      font-family: 'Playfair Display', serif;
       color: var(--black);
-      margin-bottom: 24px;
-    }
-    .map-embed iframe {
-      width: 100%;
-      height: 100%;
-      min-height: 450px;
       border: none;
+      padding: 12px 24px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 12px;
+      border-radius: 4px;
     }
-
+    .login-form {
+      text-align: center;
+      padding: 40px;
+    }
+    .login-form input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      background: var(--dark);
+      border: 1px solid var(--gold);
+      color: var(--light);
+    }
+    .disabled-booking {
+      background: var(--danger);
+      color: white;
+      padding: 12px;
+      text-align: center;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .disabled-booking a {
+      color: white;
+      text-decoration: underline;
+    }
+    
+    /* ===== OTHER SECTIONS (compressed) ===== */
+    #hero { height: 100vh; position: relative; display: flex; align-items: center; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.6) 60%, rgba(10,10,10,0.85) 100%), url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1800&q=80') center/cover no-repeat; }
+    .hero-content { position: relative; padding: 0 60px; max-width: 780px; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 7vw, 6rem); font-weight: 900; line-height: 1.0; margin-bottom: 24px; }
+    .hero-title em { font-style: italic; color: var(--gold); display: block; }
+    .btn-primary { background: var(--gold); color: var(--black); padding: 16px 40px; font-size: 0.8rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; display: inline-block; transition: all 0.3s; border: none; cursor: pointer; }
+    .btn-primary.disabled { opacity: 0.5; pointer-events: none; }
+    .btn-secondary { border: 1px solid rgba(245,240,232,0.3); color: var(--light); padding: 16px 40px; font-size: 0.8rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; display: inline-block; transition: all 0.3s; }
+    section { padding: 100px 60px; }
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    .service-card { background: var(--dark2); padding: 40px 36px; transition: all 0.4s ease; }
+    .service-price .price { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--gold); }
+    .booking-form { background: var(--dark2); padding: 48px; border-radius: 8px; }
+    .whatsapp-float { position: fixed; bottom: 32px; right: 32px; width: 56px; height: 56px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; text-decoration: none; z-index: 999; }
     @media (max-width: 900px) {
-      nav { padding: 16px 24px; }
+      nav { padding: 20px 24px; }
       .nav-links, .nav-cta { display: none; }
       .hamburger { display: flex; }
-      section { padding: 60px 24px; }
-      .hero-content { padding: 0 24px; }
+      section { padding: 70px 24px; }
       .services-grid { grid-template-columns: 1fr; }
-      #agendamento { grid-template-columns: 1fr; gap: 40px; }
-      .map-container { grid-template-columns: 1fr; }
-      .admin-sidebar { width: 100%; right: -100%; }
+      .admin-panel { width: 100%; right: -100%; }
     }
+    @media (hover: hover) { body { cursor: none; } }
+    .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .promo-badge { background: linear-gradient(45deg, var(--gold), var(--gold-dark)); color: var(--black); padding: 8px 16px; border-radius: 4px; font-weight: bold; display: inline-block; margin-bottom: 20px; }
   </style>
 </head>
 <body>
+  <div id="cursor"></div><div id="cursor-ring"></div>
+  <a href="https://wa.me/5577999999999?text=Olá! Gostaria de agendar um horário." class="whatsapp-float" target="_blank">📱</a>
 
-<div id="adminLoginOverlay" class="admin-login-overlay">
-  <div class="admin-login-box">
-    <h2>🔐 Área Restrita</h2>
-    <input type="password" id="adminPassword" placeholder="Senha do Administrador">
-    <button onclick="loginAdmin()">Entrar no Painel</button>
-    <p style="color: #888; margin-top: 16px; font-size: 12px; text-align: center;">Senha padrão: <strong>admin123</strong></p>
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel" class="admin-panel">
+    <div class="admin-header"><h2>⚙️ Painel Admin - RHD Cortes</h2><button class="close-admin" onclick="closeAdminPanel()">✕</button></div>
+    <div class="admin-content" id="adminContent"></div>
   </div>
-</div>
 
-<div id="bookingWarning" class="booking-disabled-warning">
-  ⚠️ ATENDIMENTO POR ORDEM DE CHEGADA - Agendamentos online desativados temporariamente
-</div>
+  <nav id="navbar">
+    <a href="#" class="nav-logo"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23C9A84C'/%3E%3Ctext x='50' y='68' font-size='50' text-anchor='middle' fill='%230A0A0A' font-family='Arial' font-weight='bold'%3ERHD%3C/text%3E%3C/svg%3E" alt="RHD" class="logo-img"><span>RHD</span><span>Cortes</span></a>
+    <ul class="nav-links"><li><a href="#about">Sobre</a></li><li><a href="#services">Serviços</a></li><li><a href="#gallery">Galeria</a></li><li><a href="#team">Barbeiros</a></li></ul>
+    <div><button class="admin-btn" onclick="showAdminLogin()">👑 Admin</button><a href="#agendamento" class="nav-cta">Agendar</a></div>
+    <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  </nav>
+  <div id="mobileMenu" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(10,10,10,0.98); z-index:999; flex-direction:column; align-items:center; justify-content:center; gap:32px;"><button onclick="toggleMenu()" style="position:absolute; top:24px; right:24px; background:none; border:none; color:var(--gold); font-size:1.5rem;">✕</button><a href="#hero" onclick="toggleMenu()">Início</a><a href="#about" onclick="toggleMenu()">Sobre</a><a href="#services" onclick="toggleMenu()">Serviços</a><a href="#team" onclick="toggleMenu()">Barbeiros</a><a href="#agendamento" onclick="toggleMenu()">Agendar</a></div>
 
-<div class="admin-panel" id="adminPanelBtn" style="display: none;">
-  <button class="admin-toggle" onclick="toggleAdminSidebar()">⚙️</button>
-</div>
+  <section id="hero"><div class="hero-bg"></div><div class="hero-content"><h1 class="hero-title">Estilo que <em>Impressiona</em></h1><p class="hero-subtitle">RHD Cortes - A barbearia mais premium de Barreiras. Precisão, tradição e modernidade.</p><div class="hero-buttons"><a href="#agendamento" class="btn-primary" id="bookingBtnMain">Agendar Agora</a><a href="#services" class="btn-secondary">Ver Serviços</a></div></div></section>
 
-<div id="adminSidebar" class="admin-sidebar">
-  <button class="close-admin" onclick="toggleAdminSidebar()">✕</button>
-  <h3>⚡ Painel Administrativo</h3>
-  
-  <div class="admin-section">
-    <h4>💰 Preços dos Serviços</h4>
-    <div id="servicesPriceList"></div>
-    <button class="btn-save" onclick="saveAllPrices()">Salvar Alterações</button>
-  </div>
-  
-  <div class="admin-section">
-    <h4>🎯 Promoção Ativa</h4>
-    <input type="text" id="promoText" class="promo-input" placeholder="Texto da promoção (ex: Corte + Barba por R$79)">
-    <button class="btn-save" onclick="savePromo()">Salvar Promoção</button>
-  </div>
-  
-  <div class="admin-section">
-    <h4>🔄 Modo de Atendimento</h4>
-    <div class="mode-toggle">
-      <label>
-        <span>📋 Agendamentos Online</span>
-        <input type="checkbox" id="bookingModeToggle" onchange="toggleBookingMode()">
-      </label>
-    </div>
-    <p style="font-size: 12px; color: #888; margin-top: 8px;">
-      Quando desativado, clientes serão atendidos por <strong>ordem de chegada</strong> e os botões de agendamento serão bloqueados.
-    </p>
-  </div>
-  
-  <button class="logout-btn" onclick="logoutAdmin()">🚪 Sair do Painel</button>
-</div>
+  <section id="about"><div><h2 class="section-title">Sobre Nós</h2><p><strong>RHD Cortes</strong> - Tradição e estilo no coração de Barreiras. Referência em cortes masculinos e barba.</p><p>📍 Rua Ruy Barbosa 405 centro, Barreiras - Bahia</p></div></section>
 
-<nav id="navbar">
-  <a href="#" class="nav-logo">
-    <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="100" height="100" rx="10" fill="#D4AF37"/>
-      <path d="M50 20 L65 35 L50 50 L35 35 Z" fill="#0A0A0A"/>
-      <path d="M50 50 L65 65 L50 80 L35 65 Z" fill="#0A0A0A"/>
-      <circle cx="50" cy="50" r="8" fill="#D4AF37"/>
-      <path d="M50 30 L50 70 M35 50 L65 50" stroke="#D4AF37" stroke-width="2"/>
-    </svg>
-    <div class="logo-text">RHD<span>Cortes</span></div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#about">Sobre</a></li>
-    <li><a href="#services">Serviços</a></li>
-    <li><a href="#team">Barbeiros</a></li>
-    <li><a href="#testimonials">Avaliações</a></li>
-  </ul>
-  <a href="#agendamento" class="nav-cta" id="bookingNavBtn">Agendar Horário</a>
-  <div class="hamburger" onclick="toggleMobileMenu()">
-    <span></span><span></span><span></span>
-  </div>
-</nav>
+  <section id="services"><h2 class="section-title">Nossos Serviços</h2><div id="servicesGrid" class="services-grid"></div></section>
 
-<div id="mobileMenu" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10,10,10,0.98); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; gap: 24px;">
-  <button style="position: absolute; top: 24px; right: 24px; background: none; border: none; color: var(--gold); font-size: 24px;" onclick="toggleMobileMenu()">✕</button>
-  <a href="#about" style="color: white; text-decoration: none; font-size: 24px;" onclick="toggleMobileMenu()">Sobre</a>
-  <a href="#services" style="color: white; text-decoration: none; font-size: 24px;" onclick="toggleMobileMenu()">Serviços</a>
-  <a href="#team" style="color: white; text-decoration: none; font-size: 24px;" onclick="toggleMobileMenu()">Barbeiros</a>
-  <a href="#agendamento" style="color: white; text-decoration: none; font-size: 24px;" onclick="toggleMobileMenu()">Agendar</a>
-</div>
+  <section id="team"><h2 class="section-title">Nossos Barbeiros</h2><div class="team-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;"><div class="barber-card"><h3>Rafael Dias</h3><p>Master Barber - 10 anos</p></div><div class="barber-card"><h3>Henrique Silva</h3><p>Especialista em Fade</p></div><div class="barber-card"><h3>Daniel Costa</h3><p>Barba & Navalha</p></div></div></section>
 
-<section id="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-content">
-    <div class="hero-label"><span>Barreiras · BA</span></div>
-    <h1 class="hero-title">Estilo que<br><em>transforma</em></h1>
-    <p class="hero-subtitle">RHD Cortes - Onde cada detalhe é pensado para elevar sua autoestima. Cortes precisos, ambiente premium e os melhores barbeiros da região.</p>
-    <div class="hero-buttons">
-      <a href="#agendamento" class="btn-primary" id="heroBookingBtn">Agendar Agora</a>
-      <a href="#services" class="btn-secondary">Ver Serviços</a>
-    </div>
-  </div>
-</section>
+  <section id="gallery"><h2 class="section-title">Galeria</h2><div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;"><div style="height:200px; background:#333;"></div><div style="height:200px; background:#444;"></div><div style="height:200px; background:#555;"></div></div></section>
 
-<section id="services">
-  <div class="section-label"><span>O que oferecemos</span></div>
-  <h2 class="section-title">Nossos Serviços</h2>
-  <div class="services-grid" id="servicesGrid"></div>
-</section>
+  <section id="agendamento"><div><h2>Agende seu Horário</h2><div id="walkinWarning" style="display:none;" class="disabled-booking"><i class="fas fa-exclamation-triangle"></i> ⚠️ Agendamentos online desativados! Atendimento por ordem de chegada. <a href="#localizacao">Venha nos visitar →</a></div></div>
+  <div class="booking-form"><h3>Solicitar Agendamento</h3>
+    <input type="text" id="bookName" placeholder="Seu nome" style="width:100%; padding:12px; margin-bottom:12px; background:var(--dark); border:1px solid var(--gold); color:white;"><input type="tel" id="bookPhone" placeholder="WhatsApp" style="width:100%; padding:12px; margin-bottom:12px; background:var(--dark); border:1px solid var(--gold); color:white;">
+    <select id="bookService" style="width:100%; padding:12px; margin-bottom:12px; background:var(--dark); border:1px solid var(--gold); color:white;"></select>
+    <input type="date" id="bookDate" style="width:100%; padding:12px; margin-bottom:12px; background:var(--dark); border:1px solid var(--gold); color:white;">
+    <select id="bookTime" style="width:100%; padding:12px; margin-bottom:12px; background:var(--dark); border:1px solid var(--gold); color:white;"><option>09:00</option><option>10:00</option><option>11:00</option><option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option></select>
+    <button class="btn-form" id="submitBookingBtn" style="background:var(--gold); color:black; padding:16px; width:100%; font-weight:bold;">Confirmar via WhatsApp</button>
+  </div></section>
 
-<section id="agendamento">
-  <div class="booking-info">
-    <div class="section-label"><span>Reserve seu Horário</span></div>
-    <h2 class="section-title">Agende sua Visita</h2>
-    <p style="margin: 20px 0; color: rgba(245,240,232,0.6);">Garanta seu horário com antecedência e evite espera.</p>
-    <div class="contact-items">
-      <div class="contact-item" style="display: flex; gap: 16px; margin-bottom: 24px;">
-        <span style="font-size: 24px;">📍</span>
-        <div><h4 style="color: var(--gold);">Endereço</h4><p>Rua Ruy Barbosa, 405 - Centro, Barreiras - BA</p></div>
-      </div>
-      <div class="contact-item" style="display: flex; gap: 16px; margin-bottom: 24px;">
-        <span style="font-size: 24px;">📞</span>
-        <div><h4 style="color: var(--gold);">WhatsApp</h4><p>(77) 9 9999-9999</p></div>
-      </div>
-    </div>
-  </div>
-  <div class="booking-form">
-    <h3 class="form-title">Solicitar Agendamento</h3>
-    <div class="form-group">
-      <label>Nome Completo</label>
-      <input type="text" id="bookingName" placeholder="Seu nome">
-    </div>
-    <div class="form-group">
-      <label>WhatsApp</label>
-      <input type="tel" id="bookingPhone" placeholder="(77) 9 9999-9999">
-    </div>
-    <div class="form-group">
-      <label>Serviço</label>
-      <select id="bookingService"></select>
-    </div>
-    <div class="form-group">
-      <label>Data</label>
-      <input type="date" id="bookingDate">
-    </div>
-    <div class="form-group">
-      <label>Horário</label>
-      <select id="bookingTime">
-        <option>09:00</option><option>09:30</option><option>10:00</option><option>10:30</option>
-        <option>11:00</option><option>11:30</option><option>14:00</option><option>14:30</option>
-        <option>15:00</option><option>15:30</option><option>16:00</option><option>16:30</option>
-        <option>17:00</option><option>17:30</option><option>18:00</option><option>18:30</option>
-        <option>19:00</option>
-      </select>
-    </div>
-    <button class="btn-form" id="submitBookingBtn" onclick="submitBooking()">Confirmar Agendamento</button>
-  </div>
-</section>
+  <div id="localizacao" style="padding:60px; background:var(--dark); text-align:center;"><h2>📍 Nossa Localização</h2><p style="font-size:1.2rem;">Rua Ruy Barbosa 405, Centro - Barreiras, Bahia</p><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3900.0!2d-45.0!3d-12.15!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDA5JzAwLjAiUyA0NcKwMDAnMDAuMCJX!5e0!3m2!1spt-BR!2sbr!4v1" width="100%" height="300" style="border:0; margin-top:20px;" allowfullscreen></iframe></div>
 
-<div id="localizacao">
-  <div class="map-container">
-    <div class="map-info">
-      <h2>Como Chegar</h2>
-      <p style="margin-top: 16px;"><strong>Rua Ruy Barbosa, 405 - Centro</strong><br>Barreiras - Bahia<br>CEP: 47800-000</p>
-      <p style="margin-top: 16px;">🕐 Seg-Sex: 9h às 20h<br>🕐 Sábado: 8h às 18h</p>
-    </div>
-    <div class="map-embed">
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3920.5!2d-45.0025!3d-12.1525!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDA5JzA5LjAiUyA0NcKwMDAnMDkuMCJX!5e0!3m2!1spt-BR!2sbr!4v1" allowfullscreen="" loading="lazy"></iframe>
-    </div>
-  </div>
-</div>
+  <footer style="background:var(--dark2); padding:40px 60px; text-align:center;"><p>© 2025 RHD Cortes - Rua Ruy Barbosa 405, Centro, Barreiras BA</p><p>💈 Tradição e estilo que combinam com você</p></footer>
 
-<script>
-// Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyDo4ggE2GaUapP03mx3Ho_Pq03Hbis9R3w",
-  authDomain: "barbearia-66283.firebaseapp.com",
-  projectId: "barbearia-66283",
-  storageBucket: "barbearia-66283.firebasestorage.app",
-  messagingSenderId: "21078616677",
-  appId: "1:21078616677:web:3b3c402cafc0edd6f1b48c"
-};
+  <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDo4ggE2GaUapP03mx3Ho_Pq03Hbis9R3w",
+      authDomain: "barbearia-66283.firebaseapp.com",
+      projectId: "barbearia-66283",
+      storageBucket: "barbearia-66283.firebasestorage.app",
+      messagingSenderId: "21078616677",
+      appId: "1:21078616677:web:3b3c402cafc0edd6f1b48c",
+      measurementId: "G-5SPNP73GQ6"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const auth = firebase.auth();
+    // Estado global
+    let services = [
+      { id: "1", name: "Corte Premium", price: 50, active: true },
+      { id: "2", name: "Barba Modelada", price: 35, active: true },
+      { id: "3", name: "Combo RHD", price: 80, active: true },
+      { id: "4", name: "Navalha Premium", price: 45, active: true },
+      { id: "5", name: "Pigmentação", price: 70, active: true },
+      { id: "6", name: "Hidratação", price: 55, active: true }
+    ];
+    let promoActive = false;
+    let promoText = "🔥 PROMOÇÃO: Combo RHD por apenas R$70!";
+    let walkinMode = false; // ordem de chegada
 
-// Initial data
-const defaultServices = [
-  { id: 1, name: "Corte Masculino", desc: "Corte personalizado com acabamento perfeito", price: 45 },
-  { id: 2, name: "Barba Modelada", desc: "Modelagem completa com navalha", price: 35 },
-  { id: 3, name: "Combo Premium", desc: "Corte + Barba + Sobrancelha", price: 95 },
-  { id: 4, name: "Hot Towel Shave", desc: "Barbear tradicional com toalha quente", price: 55 },
-  { id: 5, name: "Pigmentação", desc: "Disfarce de grisalhos", price: 70 },
-  { id: 6, name: "Hidratação", desc: "Tratamento capilar profundo", price: 50 }
-];
+    // Helper
+    function renderServices() {
+      const container = document.getElementById('servicesGrid');
+      if (!container) return;
+      container.innerHTML = services.filter(s => s.active).map(s => `
+        <div class="service-card fade-in"><span class="service-icon">✂️</span><h3>${s.name}</h3><div class="service-price"><div><span class="price">R$ ${s.price}</span></div><a href="#agendamento" class="service-link">Agendar →</a></div></div>
+      `).join('');
+      // Update select
+      const select = document.getElementById('bookService');
+      if (select) {
+        select.innerHTML = services.filter(s => s.active).map(s => `<option value="${s.name} - R$${s.price}">${s.name} - R$${s.price}</option>`).join('');
+      }
+    }
 
-let servicesData = [...defaultServices];
-let promoText = "";
-let bookingEnabled = true;
+    async function loadData() {
+      try {
+        const servicesSnap = await db.collection('services').get();
+        if (!servicesSnap.empty) {
+          const loaded = [];
+          servicesSnap.forEach(doc => loaded.push({ id: doc.id, ...doc.data() }));
+          if (loaded.length) services = loaded;
+        } else {
+          // seed
+          for (let s of services) await db.collection('services').doc(s.id).set(s);
+        }
+        const settingsSnap = await db.collection('settings').doc('config').get();
+        if (settingsSnap.exists) {
+          const data = settingsSnap.data();
+          walkinMode = data.walkinMode || false;
+          promoActive = data.promoActive || false;
+          promoText = data.promoText || promoText;
+        } else {
+          await db.collection('settings').doc('config').set({ walkinMode: false, promoActive: false, promoText });
+        }
+        renderServices();
+        updateUIForWalkinMode();
+      } catch (e) { console.error("Firebase error:", e); renderServices(); }
+    }
 
-// Load data from Firestore
-async function loadData() {
-  const servicesDoc = await db.collection("config").doc("services").get();
-  if (servicesDoc.exists) {
-    servicesData = servicesDoc.data().list;
-  } else {
-    await db.collection("config").doc("services").set({ list: servicesData });
-  }
-  
-  const promoDoc = await db.collection("config").doc("promo").get();
-  if (promoDoc.exists) {
-    promoText = promoDoc.data().text;
-  }
-  
-  const modeDoc = await db.collection("config").doc("mode").get();
-  if (modeDoc.exists) {
-    bookingEnabled = modeDoc.data().bookingEnabled;
-  } else {
-    await db.collection("config").doc("mode").set({ bookingEnabled: true });
-  }
-  
-  renderServices();
-  renderPromo();
-  updateBookingButtons();
-}
+    function updateUIForWalkinMode() {
+      const warningDiv = document.getElementById('walkinWarning');
+      const bookingBtn = document.getElementById('bookingBtnMain');
+      const submitBtn = document.getElementById('submitBookingBtn');
+      const bookInputs = ['bookName', 'bookPhone', 'bookService', 'bookDate', 'bookTime'];
+      if (walkinMode) {
+        if (warningDiv) warningDiv.style.display = 'block';
+        if (bookingBtn) { bookingBtn.classList.add('disabled'); bookingBtn.style.pointerEvents = 'none'; bookingBtn.style.opacity = '0.5'; }
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = '0.5'; submitBtn.style.cursor = 'not-allowed'; submitBtn.textContent = '❌ Agendamentos Desativados'; }
+        bookInputs.forEach(id => { let el = document.getElementById(id); if (el) el.disabled = true; });
+      } else {
+        if (warningDiv) warningDiv.style.display = 'none';
+        if (bookingBtn) { bookingBtn.classList.remove('disabled'); bookingBtn.style.pointerEvents = 'auto'; bookingBtn.style.opacity = '1'; }
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = '1'; submitBtn.style.cursor = 'pointer'; submitBtn.textContent = 'Confirmar via WhatsApp'; }
+        bookInputs.forEach(id => { let el = document.getElementById(id); if (el) el.disabled = false; });
+      }
+    }
 
-function renderServices() {
-  const grid = document.getElementById("servicesGrid");
-  if (!grid) return;
-  
-  grid.innerHTML = servicesData.map(service => `
-    <div class="service-card">
-      ${promoText && service.id === 1 ? `<div class="promo-badge">🎯 ${promoText}</div>` : ''}
-      <h3>${service.name}</h3>
-      <p>${service.desc}</p>
-      <div class="service-price">
-        <div>
-          <span class="price-from">a partir de</span>
-          <span class="price">R$ ${service.price}</span>
+    async function updateSettings() {
+      await db.collection('settings').doc('config').set({ walkinMode, promoActive, promoText }, { merge: true });
+    }
+
+    async function saveServicesToFirebase() {
+      for (let s of services) await db.collection('services').doc(s.id).set(s);
+    }
+
+    // Admin Auth & Panel
+    let adminAuthenticated = false;
+    function showAdminLogin() {
+      const pwd = prompt("🔐 Login Admin - Digite a senha:");
+      if (pwd === "admin123") {
+        adminAuthenticated = true;
+        openAdminPanel();
+      } else if (pwd === "RHD2025") {
+        adminAuthenticated = true;
+        openAdminPanel();
+      } else if (pwd) alert("Senha incorreta! Tente: admin123 ou RHD2025");
+    }
+    function openAdminPanel() {
+      if (!adminAuthenticated) { showAdminLogin(); return; }
+      const panel = document.getElementById('adminPanel');
+      const content = document.getElementById('adminContent');
+      content.innerHTML = `
+        <div class="admin-section"><h3>🔄 Modo de Atendimento</h3>
+          <div class="walkin-status"><label>📋 Modo "Ordem de Chegada" (desativa agendamentos online)</label>
+          <label class="toggle-switch"><input type="checkbox" id="walkinToggle" ${walkinMode ? 'checked' : ''}><span class="slider"></span></label>
+          <p class="${walkinMode ? 'walkin-active' : ''}">${walkinMode ? '⚠️ Agendamentos CANCELADOS - Atendimento por ordem de chegada' : '✅ Agendamentos online ATIVOS'}</p></div>
+          <button class="btn-save" onclick="toggleWalkinMode()">Aplicar Modo</button>
         </div>
-      </div>
-    </div>
-  `).join('');
-  
-  const serviceSelect = document.getElementById("bookingService");
-  if (serviceSelect) {
-    serviceSelect.innerHTML = servicesData.map(s => `<option value="${s.name} - R$${s.price}">${s.name} - R$${s.price}</option>`).join('');
-  }
-  
-  // Render admin price list
-  const priceListDiv = document.getElementById("servicesPriceList");
-  if (priceListDiv) {
-    priceListDiv.innerHTML = servicesData.map(service => `
-      <div class="service-price-edit">
-        <span>${service.name}</span>
-        <input type="number" id="price_${service.id}" value="${service.price}" step="5">
-      </div>
-    `).join('');
-  }
-}
-
-function renderPromo() {
-  const promoInput = document.getElementById("promoText");
-  if (promoInput) promoInput.value = promoText;
-  if (promoText) {
-    const promoBadge = document.querySelector(".promo-badge");
-    if (promoBadge) promoBadge.textContent = `🎯 ${promoText}`;
-  }
-}
-
-function updateBookingButtons() {
-  const btns = document.querySelectorAll('.nav-cta, .btn-primary, .btn-form, #heroBookingBtn, #submitBookingBtn');
-  btns.forEach(btn => {
-    if (!bookingEnabled) {
-      btn.classList.add('disabled');
-    } else {
-      btn.classList.remove('disabled');
+        <div class="admin-section"><h3>💰 Preços dos Serviços</h3>
+          ${services.map(s => `<div class="service-item-admin"><input type="text" value="${s.name}" id="sname_${s.id}" placeholder="Nome"><input type="number" value="${s.price}" id="sprice_${s.id}" placeholder="Preço"><button class="btn-save" style="background:#555;" onclick="updateServicePrice('${s.id}')">Salvar ${s.name}</button></div>`).join('')}
+        </div>
+        <div class="admin-section"><h3>🎯 Promoção Ativa</h3>
+          <div class="promo-card"><label><input type="checkbox" id="promoCheckbox" ${promoActive ? 'checked' : ''}> Ativar promoção no site</label>
+          <input type="text" id="promoTextInput" value="${promoText}" style="width:100%; margin-top:12px; padding:8px;">
+          <button class="btn-save" onclick="updatePromo()">Salvar Promoção</button></div>
+        </div>
+        <div class="admin-section"><h3>📊 Informações da Barbearia</h3>
+          <p><strong>📍 Endereço:</strong> Rua Ruy Barbosa 405, Centro, Barreiras BA</p>
+          <p><strong>📞 WhatsApp:</strong> (77) 9 9999-9999</p>
+          <button class="btn-save" onclick="alert('Endereço salvo localmente. Para alterar edite o HTML.')">Salvar Info</button>
+        </div>
+      `;
+      panel.classList.add('open');
     }
-  });
-  
-  const warning = document.getElementById("bookingWarning");
-  if (!bookingEnabled) {
-    warning.classList.add('show');
-  } else {
-    warning.classList.remove('show');
-  }
-}
+    function closeAdminPanel() { document.getElementById('adminPanel').classList.remove('open'); }
+    window.updateServicePrice = async (id) => {
+      const newName = document.getElementById(`sname_${id}`).value;
+      const newPrice = parseInt(document.getElementById(`sprice_${id}`).value);
+      const index = services.findIndex(s => s.id === id);
+      if (index !== -1) {
+        services[index].name = newName;
+        services[index].price = newPrice;
+        await saveServicesToFirebase();
+        renderServices();
+        alert(`✅ ${newName} atualizado para R$ ${newPrice}`);
+        openAdminPanel(); // refresh
+      }
+    };
+    window.toggleWalkinMode = async () => {
+      walkinMode = !walkinMode;
+      await updateSettings();
+      updateUIForWalkinMode();
+      openAdminPanel();
+      alert(walkinMode ? "Modo ordem de chegada ATIVADO - Agendamentos cancelados" : "Agendamentos reativados");
+    };
+    window.updatePromo = async () => {
+      promoActive = document.getElementById('promoCheckbox').checked;
+      promoText = document.getElementById('promoTextInput').value;
+      await updateSettings();
+      if (promoActive) alert(`Promoção ativada: ${promoText}`);
+      else alert("Promoção desativada");
+      openAdminPanel();
+    };
 
-async function saveAllPrices() {
-  for (let service of servicesData) {
-    const input = document.getElementById(`price_${service.id}`);
-    if (input) {
-      service.price = parseInt(input.value);
-    }
-  }
-  await db.collection("config").doc("services").set({ list: servicesData });
-  renderServices();
-  alert("✅ Preços atualizados com sucesso!");
-}
+    // Booking com trava
+    document.getElementById('submitBookingBtn')?.addEventListener('click', () => {
+      if (walkinMode) { alert("⚠️ Agendamentos online desativados! Atendimento por ordem de chegada. Visite nossa barbearia."); return; }
+      const name = document.getElementById('bookName').value;
+      const phone = document.getElementById('bookPhone').value;
+      const service = document.getElementById('bookService').value;
+      const date = document.getElementById('bookDate').value;
+      const time = document.getElementById('bookTime').value;
+      if (!name || !phone) { alert("Preencha nome e telefone"); return; }
+      let msg = `🪒 *RHD CORTES* - Novo agendamento%0A👤 ${name}%0A📞 ${phone}%0A✂️ Serviço: ${service}%0A📅 Data: ${date}%0A⏰ Horário: ${time}`;
+      if (promoActive) msg += `%0A🎁 *PROMO:* ${promoText}`;
+      window.open(`https://wa.me/5577999999999?text=${msg}`, '_blank');
+    });
 
-async function savePromo() {
-  const input = document.getElementById("promoText");
-  promoText = input.value;
-  await db.collection("config").doc("promo").set({ text: promoText });
-  renderServices();
-  alert("✅ Promoção salva!");
-}
-
-async function toggleBookingMode() {
-  const toggle = document.getElementById("bookingModeToggle");
-  bookingEnabled = toggle.checked;
-  await db.collection("config").doc("mode").set({ bookingEnabled: bookingEnabled });
-  updateBookingButtons();
-  renderServices();
-}
-
-function submitBooking() {
-  if (!bookingEnabled) {
-    alert("❌ Atendimento por ordem de chegada! Os agendamentos online estão temporariamente desativados.");
-    return;
-  }
-  
-  const name = document.getElementById("bookingName")?.value;
-  const phone = document.getElementById("bookingPhone")?.value;
-  const service = document.getElementById("bookingService")?.value;
-  const date = document.getElementById("bookingDate")?.value;
-  const time = document.getElementById("bookingTime")?.value;
-  
-  if (!name || !phone || !service) {
-    alert("Por favor, preencha todos os campos.");
-    return;
-  }
-  
-  const msg = `Olá! Gostaria de agendar na RHD Cortes 💈\n\n*Nome:* ${name}\n*Serviço:* ${service}\n*Data:* ${date}\n*Horário:* ${time}\n*Telefone:* ${phone}`;
-  window.open(`https://wa.me/5577999999999?text=${encodeURIComponent(msg)}`, '_blank');
-}
-
-// Admin Auth
-function loginAdmin() {
-  const pwd = document.getElementById("adminPassword").value;
-  if (pwd === "admin123") {
-    localStorage.setItem("adminLogged", "true");
-    document.getElementById("adminLoginOverlay").style.display = "none";
-    document.getElementById("adminPanelBtn").style.display = "block";
+    // Cursor, scroll e menu
+    const cursor = document.getElementById('cursor'), ring = document.getElementById('cursor-ring');
+    document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; setTimeout(() => { ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px'; }, 80); });
+    window.toggleMenu = () => { const m = document.getElementById('mobileMenu'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; };
+    window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60));
+    document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const t = document.querySelector(a.getAttribute('href')); if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); } }));
+    const fadeEls = document.querySelectorAll('.fade-in'); new IntersectionObserver(e => e.forEach(e => e.isIntersecting && (e.target.classList.add('visible'), this.unobserve(e.target))), { threshold: 0.1 }).observe.bind(observer);
     loadData();
-  } else {
-    alert("Senha incorreta!");
-  }
-}
-
-function logoutAdmin() {
-  localStorage.removeItem("adminLogged");
-  document.getElementById("adminLoginOverlay").style.display = "flex";
-  document.getElementById("adminPanelBtn").style.display = "none";
-  document.getElementById("adminSidebar").classList.remove("open");
-}
-
-function toggleAdminSidebar() {
-  document.getElementById("adminSidebar").classList.toggle("open");
-}
-
-function toggleMobileMenu() {
-  const menu = document.getElementById("mobileMenu");
-  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-}
-
-// Check login on load
-if (localStorage.getItem("adminLogged") === "true") {
-  document.getElementById("adminLoginOverlay").style.display = "none";
-  document.getElementById("adminPanelBtn").style.display = "block";
-  loadData();
-} else {
-  document.getElementById("adminLoginOverlay").style.display = "flex";
-  loadData();
-}
-
-// Smooth scroll
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-});
-
-// Load booking mode toggle state
-async function loadBookingModeState() {
-  const modeDoc = await db.collection("config").doc("mode").get();
-  if (modeDoc.exists) {
-    bookingEnabled = modeDoc.data().bookingEnabled;
-    const toggle = document.getElementById("bookingModeToggle");
-    if (toggle) toggle.checked = bookingEnabled;
-    updateBookingButtons();
-  }
-}
-loadBookingModeState();
-</script>
+  </script>
 </body>
 </html>
