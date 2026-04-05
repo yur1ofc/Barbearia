@@ -3,1897 +3,1191 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CorteNobre Barbearia | Salvador - BA</title>
-  <meta name="description" content="CorteNobre Barbearia - Cortes precisos, barba impecável, experiência premium em Salvador. Agende seu horário.">
+  <title>RHD Cortes | Barbearia · Barreiras - BA</title>
+  <meta name="description" content="RHD Cortes - China dos cortes. Rua Ruy Barbosa 405, Centro, Barreiras BA. Agende seu horário.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --gold: #C9A84C;
-      --gold-light: #E2C06B;
-      --gold-dark: #9A7A30;
-      --black: #0A0A0A;
-      --dark: #111111;
-      --dark2: #1A1A1A;
-      --dark3: #222222;
-      --gray: #888888;
-      --light: #F5F0E8;
-      --white: #FFFFFF;
+      --gold: #D4AF37;
+      --gold2: #FFD700;
+      --red: #C0392B;
+      --black: #050505;
+      --dark: #0D0D0D;
+      --dark2: #141414;
+      --dark3: #1C1C1C;
+      --gray: #666;
+      --light: #E8E0D0;
+      --white: #FFF;
     }
-
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html { scroll-behavior: smooth; }
+    body { font-family:'Rajdhani',sans-serif; background:var(--black); color:var(--light); overflow-x:hidden; }
+    ::-webkit-scrollbar { width:3px; }
+    ::-webkit-scrollbar-thumb { background:var(--gold); }
 
-    body {
-      font-family: 'Barlow', sans-serif;
-      background: var(--black);
-      color: var(--light);
-      overflow-x: hidden;
-    }
-
-    /* ── CURSOR ── */
-    body { cursor: none; }
-    #cursor {
-      width: 10px; height: 10px;
-      background: var(--gold);
-      border-radius: 50%;
-      position: fixed; top: 0; left: 0;
-      pointer-events: none;
-      z-index: 99999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s, width 0.2s, height 0.2s;
-    }
-    #cursor-ring {
-      width: 36px; height: 36px;
-      border: 1px solid rgba(201,168,76,0.5);
-      border-radius: 50%;
-      position: fixed; top: 0; left: 0;
-      pointer-events: none;
-      z-index: 99998;
-      transform: translate(-50%, -50%);
-      transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
-    }
-
-    /* ── SCROLLBAR ── */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--dark); }
-    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
-
-    /* ── NAV ── */
+    /* ─── NAV ─── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 1000;
-      padding: 24px 60px;
-      display: flex; align-items: center; justify-content: space-between;
-      transition: all 0.4s ease;
+      position:fixed; top:0; left:0; right:0; z-index:1000;
+      padding:18px 48px;
+      display:flex; align-items:center; justify-content:space-between;
+      transition:all .4s;
     }
     nav.scrolled {
-      background: rgba(10,10,10,0.95);
-      padding: 16px 60px;
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(201,168,76,0.15);
+      background:rgba(5,5,5,.97);
+      padding:12px 48px;
+      border-bottom:1px solid rgba(212,175,55,.15);
+      backdrop-filter:blur(12px);
     }
-    .nav-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--gold);
-      text-decoration: none;
-      letter-spacing: 1px;
-    }
-    .nav-logo span { color: var(--white); }
-    .nav-links { display: flex; gap: 36px; list-style: none; }
-    .nav-links a {
-      color: rgba(245,240,232,0.7);
-      text-decoration: none;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      transition: color 0.3s;
-    }
-    .nav-links a:hover { color: var(--gold); }
-    .nav-cta {
-      background: transparent;
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      padding: 10px 28px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.3s;
-    }
-    .nav-cta:hover {
-      background: var(--gold);
-      color: var(--black);
-    }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      padding: 4px;
-    }
-    .hamburger span {
-      display: block;
-      width: 26px;
-      height: 2px;
-      background: var(--gold);
-      transition: all 0.3s;
-    }
+    .nav-logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
+    .nav-logo img { width:52px; height:52px; object-fit:contain; filter:drop-shadow(0 0 8px rgba(212,175,55,.4)); }
+    .nav-logo-text { font-family:'Cinzel',serif; font-size:1.3rem; font-weight:700; color:var(--gold); letter-spacing:2px; }
+    .nav-links { display:flex; gap:32px; list-style:none; }
+    .nav-links a { color:rgba(232,224,208,.65); text-decoration:none; font-size:.8rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; transition:color .3s; }
+    .nav-links a:hover { color:var(--gold); }
+    .nav-right { display:flex; gap:12px; align-items:center; }
+    .nav-cta { background:var(--gold); color:var(--black); padding:9px 24px; font-family:'Rajdhani',sans-serif; font-size:.75rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; text-decoration:none; transition:all .3s; }
+    .nav-cta:hover { background:var(--gold2); }
+    .btn-admin { background:transparent; border:1px solid rgba(255,255,255,.12); color:rgba(255,255,255,.4); padding:8px 14px; font-size:.7rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition:all .3s; font-family:'Rajdhani',sans-serif; }
+    .btn-admin:hover { border-color:var(--gold); color:var(--gold); }
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+    .hamburger span { display:block; width:26px; height:2px; background:var(--gold); transition:all .3s; }
 
-    /* ── HERO ── */
+    /* ─── HERO ─── */
     #hero {
-      height: 100vh;
-      position: relative;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
+      min-height:100vh; position:relative; display:flex; align-items:center; justify-content:center;
+      overflow:hidden; text-align:center;
     }
     .hero-bg {
-      position: absolute; inset: 0;
-      background: 
-        linear-gradient(135deg, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.6) 60%, rgba(10,10,10,0.85) 100%),
+      position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse at 50% 40%, rgba(212,175,55,.07) 0%, transparent 60%),
+        linear-gradient(to bottom, rgba(5,5,5,.7) 0%, rgba(5,5,5,.5) 40%, rgba(5,5,5,.85) 100%),
         url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1800&q=80') center/cover no-repeat;
     }
-    .hero-bg::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 70% 50%, rgba(201,168,76,0.08) 0%, transparent 60%);
+    .hero-bg::before {
+      content:'';
+      position:absolute; inset:0;
+      background:repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.03) 2px, rgba(0,0,0,.03) 4px);
+      pointer-events:none;
     }
-    .hero-content {
-      position: relative;
-      padding: 0 60px;
-      max-width: 780px;
+    .hero-content { position:relative; z-index:2; padding:0 24px; max-width:900px; }
+    .hero-logo {
+      width:140px; height:140px; object-fit:contain;
+      margin:0 auto 28px;
+      filter:drop-shadow(0 0 24px rgba(212,175,55,.5));
+      animation:logoPulse 3s ease-in-out infinite;
     }
-    .hero-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 28px;
+    @keyframes logoPulse {
+      0%,100%{filter:drop-shadow(0 0 16px rgba(212,175,55,.4));}
+      50%{filter:drop-shadow(0 0 36px rgba(212,175,55,.8));}
     }
-    .hero-label::before, .hero-label::after {
-      content: '';
-      display: block;
-      width: 40px;
-      height: 1px;
-      background: var(--gold);
+    .hero-tag {
+      display:inline-flex; align-items:center; gap:10px; margin-bottom:20px;
+      font-size:.65rem; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:var(--gold);
     }
-    .hero-label span {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
+    .hero-tag::before,.hero-tag::after { content:''; display:block; width:32px; height:1px; background:var(--gold); }
     .hero-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(3.5rem, 7vw, 6rem);
-      font-weight: 900;
-      line-height: 1.0;
-      margin-bottom: 24px;
+      font-family:'Cinzel',serif;
+      font-size:clamp(3rem,8vw,6.5rem);
+      font-weight:900; line-height:.95;
+      color:var(--white);
+      margin-bottom:8px;
+      text-shadow:0 0 60px rgba(212,175,55,.2);
     }
-    .hero-title em {
-      font-style: italic;
-      color: var(--gold);
-      display: block;
-    }
+    .hero-title span { color:var(--gold); }
     .hero-subtitle {
-      font-size: 1.05rem;
-      font-weight: 300;
-      color: rgba(245,240,232,0.7);
-      line-height: 1.7;
-      max-width: 480px;
-      margin-bottom: 48px;
-    }
-    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
-    .btn-primary {
-      background: var(--gold);
-      color: var(--black);
-      padding: 16px 40px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-decoration: none;
-      display: inline-block;
-      transition: all 0.3s;
-    }
-    .btn-primary:hover {
-      background: var(--gold-light);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(201,168,76,0.3);
-    }
-    .btn-secondary {
-      border: 1px solid rgba(245,240,232,0.3);
-      color: var(--light);
-      padding: 16px 40px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-decoration: none;
-      display: inline-block;
-      transition: all 0.3s;
-    }
-    .btn-secondary:hover {
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-    .hero-stats {
-      position: absolute;
-      bottom: 60px;
-      right: 60px;
-      display: flex;
-      gap: 48px;
-    }
-    .stat {
-      text-align: center;
-    }
-    .stat-number {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--gold);
-      line-height: 1;
-    }
-    .stat-label {
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: rgba(245,240,232,0.5);
-      margin-top: 6px;
-    }
-    .hero-scroll {
-      position: absolute;
-      bottom: 60px;
-      left: 60px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .hero-scroll-line {
-      width: 1px;
-      height: 60px;
-      background: linear-gradient(to bottom, transparent, var(--gold));
-      animation: scrollPulse 2s ease-in-out infinite;
-    }
-    @keyframes scrollPulse {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; }
-    }
-    .hero-scroll span {
-      writing-mode: vertical-rl;
-      font-size: 0.65rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: rgba(245,240,232,0.4);
+      font-family:'Oswald',sans-serif;
+      font-size:clamp(1rem,2.5vw,1.4rem);
+      font-weight:300; letter-spacing:6px; text-transform:uppercase;
+      color:rgba(232,224,208,.5); margin-bottom:12px;
     }
 
-    /* ── MARQUEE ── */
-    .marquee-section {
-      background: var(--gold);
-      padding: 14px 0;
-      overflow: hidden;
+    /* MODO CHEGADA BANNER */
+    #modo-chegada-banner {
+      display:none;
+      background:linear-gradient(135deg, var(--red), #8B0000);
+      border:1px solid rgba(255,80,80,.3);
+      padding:14px 28px;
+      margin:20px auto;
+      max-width:600px;
+      text-align:center;
     }
-    .marquee-track {
-      display: flex;
-      gap: 0;
-      animation: marqueeScroll 20s linear infinite;
-      white-space: nowrap;
+    #modo-chegada-banner.active { display:block; }
+    #modo-chegada-banner h3 {
+      font-family:'Oswald',sans-serif;
+      font-size:1rem; letter-spacing:3px; text-transform:uppercase;
+      color:var(--white); margin-bottom:4px;
     }
-    .marquee-track span {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--black);
-      padding: 0 32px;
-    }
-    .marquee-track .sep {
-      color: rgba(0,0,0,0.3);
-      padding: 0;
-    }
-    @keyframes marqueeScroll {
-      from { transform: translateX(0); }
-      to { transform: translateX(-50%); }
-    }
+    #modo-chegada-banner p { font-size:.85rem; color:rgba(255,255,255,.8); }
 
-    /* ── SECTIONS COMMON ── */
-    section { padding: 100px 60px; }
-    .section-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
+    .hero-promo {
+      display:inline-block;
+      background:rgba(212,175,55,.1);
+      border:1px solid rgba(212,175,55,.3);
+      padding:8px 20px;
+      margin-bottom:32px;
+      font-size:.85rem; font-weight:600; color:var(--gold);
     }
-    .section-label::before {
-      content: '';
-      display: block;
-      width: 30px;
-      height: 1px;
-      background: var(--gold);
-    }
-    .section-label span {
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      font-weight: 700;
-      line-height: 1.15;
-    }
+    #hero-promo-text:empty + .hero-promo { display:none; }
+    .hero-buttons { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+    .btn-primary { background:var(--gold); color:var(--black); padding:15px 40px; font-family:'Rajdhani',sans-serif; font-size:.8rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; text-decoration:none; display:inline-block; transition:all .3s; }
+    .btn-primary:hover { background:var(--gold2); transform:translateY(-2px); box-shadow:0 8px 24px rgba(212,175,55,.3); }
+    .btn-outline { border:1px solid rgba(232,224,208,.25); color:var(--light); padding:15px 36px; font-family:'Rajdhani',sans-serif; font-size:.8rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; text-decoration:none; display:inline-block; transition:all .3s; }
+    .btn-outline:hover { border-color:var(--gold); color:var(--gold); }
+    .hero-scroll { position:absolute; bottom:40px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; }
+    .scroll-line { width:1px; height:50px; background:linear-gradient(to bottom,transparent,var(--gold)); animation:scrollAnim 2s ease-in-out infinite; }
+    @keyframes scrollAnim { 0%,100%{opacity:.3;} 50%{opacity:1;} }
+    .hero-scroll span { font-size:.6rem; letter-spacing:3px; text-transform:uppercase; color:rgba(232,224,208,.3); }
 
-    /* ── ABOUT ── */
-    #about {
-      background: var(--dark);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
-    }
-    .about-images {
-      position: relative;
-      height: 600px;
-    }
-    .about-img-main {
-      position: absolute;
-      top: 0; left: 0;
-      width: 75%;
-      height: 85%;
-      object-fit: cover;
-      filter: grayscale(20%);
-    }
-    .about-img-accent {
-      position: absolute;
-      bottom: 0; right: 0;
-      width: 55%;
-      height: 55%;
-      object-fit: cover;
-      border: 4px solid var(--dark);
-      filter: grayscale(10%);
-    }
-    .about-badge {
-      position: absolute;
-      top: 50%;
-      right: 10%;
-      transform: translateY(-50%);
-      background: var(--gold);
-      color: var(--black);
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-weight: 700;
-      z-index: 2;
-      box-shadow: 0 0 0 8px var(--dark), 0 0 0 10px var(--gold-dark);
-    }
-    .about-badge big {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-      line-height: 1;
-    }
-    .about-badge small {
-      font-size: 0.6rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-    .about-text .section-title { margin-bottom: 24px; }
-    .about-text p {
-      color: rgba(245,240,232,0.65);
-      line-height: 1.85;
-      margin-bottom: 16px;
-      font-weight: 300;
-    }
-    .about-features {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 40px;
-    }
-    .feature-item {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-    }
-    .feature-icon {
-      width: 36px;
-      height: 36px;
-      background: rgba(201,168,76,0.1);
-      border: 1px solid rgba(201,168,76,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 1rem;
-    }
-    .feature-item h4 {
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .feature-item p {
-      font-size: 0.78rem;
-      color: rgba(245,240,232,0.5);
-      margin: 0;
-    }
+    /* ─── MARQUEE ─── */
+    .marquee-bar { background:var(--gold); padding:12px 0; overflow:hidden; }
+    .marquee-inner { display:flex; animation:marquee 18s linear infinite; white-space:nowrap; }
+    .marquee-inner span { font-family:'Oswald',sans-serif; font-size:.7rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--black); padding:0 28px; }
+    @keyframes marquee { from{transform:translateX(0);} to{transform:translateX(-50%);} }
 
-    /* ── SERVICES ── */
-    #services { background: var(--black); }
-    .services-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 64px;
-    }
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-    }
-    .service-card {
-      background: var(--dark2);
-      padding: 40px 36px;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.4s ease;
-      group: true;
-    }
-    .service-card::before {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--gold);
-      transition: width 0.4s ease;
-    }
-    .service-card:hover::before { width: 100%; }
-    .service-card:hover { background: var(--dark3); }
-    .service-number {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 4rem;
-      font-weight: 700;
-      color: rgba(201,168,76,0.08);
-      position: absolute;
-      top: 20px;
-      right: 24px;
-      line-height: 1;
-      pointer-events: none;
-      transition: color 0.4s;
-    }
-    .service-card:hover .service-number { color: rgba(201,168,76,0.15); }
-    .service-icon {
-      font-size: 2rem;
-      margin-bottom: 20px;
-      display: block;
-    }
-    .service-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      margin-bottom: 12px;
-      color: var(--white);
-    }
-    .service-card p {
-      font-size: 0.83rem;
-      color: rgba(245,240,232,0.5);
-      line-height: 1.7;
-      margin-bottom: 24px;
-      font-weight: 300;
-    }
-    .service-price {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .price {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--gold);
-    }
-    .price-from {
-      font-size: 0.65rem;
-      color: rgba(245,240,232,0.4);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      display: block;
-      margin-bottom: 2px;
-    }
-    .service-link {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--gold);
-      text-decoration: none;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .service-card:hover .service-link { opacity: 1; }
+    /* ─── SECTIONS ─── */
+    section { padding:90px 48px; }
+    .s-label { display:inline-flex; align-items:center; gap:10px; margin-bottom:12px; }
+    .s-label::before { content:''; display:block; width:28px; height:1px; background:var(--gold); }
+    .s-label span { font-size:.62rem; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:var(--gold); }
+    .s-title { font-family:'Cinzel',serif; font-size:clamp(1.8rem,3.5vw,2.8rem); font-weight:700; line-height:1.15; }
 
-    /* ── GALLERY ── */
-    #gallery {
-      background: var(--dark);
-      padding-bottom: 0;
+    /* ─── PROMO SECTION ─── */
+    #promocao {
+      background:var(--dark2);
+      display:none;
     }
-    .gallery-header { margin-bottom: 48px; }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: 280px 280px;
-      gap: 4px;
+    #promocao.active { display:block; }
+    .promo-inner {
+      max-width:900px; margin:0 auto; text-align:center;
     }
-    .gallery-item {
-      overflow: hidden;
-      position: relative;
+    .promo-badge {
+      display:inline-block;
+      background:var(--red);
+      color:var(--white);
+      font-family:'Oswald',sans-serif;
+      font-size:.7rem; letter-spacing:4px; text-transform:uppercase;
+      padding:6px 20px; margin-bottom:20px;
     }
-    .gallery-item:first-child {
-      grid-column: span 2;
-      grid-row: span 2;
+    .promo-title {
+      font-family:'Cinzel',serif;
+      font-size:clamp(1.5rem,4vw,2.5rem);
+      color:var(--gold); margin-bottom:12px;
     }
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: grayscale(30%);
-      transition: all 0.5s ease;
+    .promo-desc {
+      font-size:1rem; color:rgba(232,224,208,.7); line-height:1.7; margin-bottom:24px; font-weight:400;
     }
-    .gallery-item:hover img {
-      filter: grayscale(0%);
-      transform: scale(1.05);
+    .promo-price {
+      font-family:'Cinzel',serif; font-size:3rem; color:var(--white);
     }
-    .gallery-item::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%);
-      pointer-events: none;
-    }
+    .promo-price s { font-size:1.5rem; color:rgba(232,224,208,.3); margin-right:12px; }
 
-    /* ── TEAM ── */
-    #team { background: var(--black); }
-    .team-header { margin-bottom: 64px; }
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
+    /* ─── SERVICES ─── */
+    #services { background:var(--dark); }
+    .services-header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:52px; }
+    .services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; }
+    .svc-card {
+      background:var(--dark2); padding:36px 32px;
+      position:relative; overflow:hidden; transition:background .3s;
     }
-    .barber-card {
-      position: relative;
-      overflow: hidden;
-    }
-    .barber-img-wrap {
-      height: 400px;
-      overflow: hidden;
-      position: relative;
-    }
-    .barber-img-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: grayscale(40%);
-      transition: all 0.5s ease;
-    }
-    .barber-card:hover .barber-img-wrap img {
-      filter: grayscale(0%);
-      transform: scale(1.04);
-    }
-    .barber-info {
-      background: var(--dark2);
-      padding: 20px 24px;
-      border-left: 3px solid transparent;
-      transition: border-color 0.3s;
-    }
-    .barber-card:hover .barber-info { border-left-color: var(--gold); }
-    .barber-info h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.15rem;
-      margin-bottom: 4px;
-    }
-    .barber-info p {
-      font-size: 0.75rem;
-      color: var(--gold);
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-    .barber-social {
-      display: flex;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .barber-social a {
-      width: 30px; height: 30px;
-      border: 1px solid rgba(245,240,232,0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(245,240,232,0.5);
-      font-size: 0.75rem;
-      text-decoration: none;
-      transition: all 0.3s;
-    }
-    .barber-social a:hover {
-      border-color: var(--gold);
-      color: var(--gold);
-    }
+    .svc-card::after { content:''; position:absolute; bottom:0; left:0; width:0; height:2px; background:var(--gold); transition:width .4s; }
+    .svc-card:hover::after { width:100%; }
+    .svc-card:hover { background:var(--dark3); }
+    .svc-num { font-family:'Oswald',sans-serif; font-size:3.5rem; font-weight:700; color:rgba(212,175,55,.06); position:absolute; top:16px; right:20px; transition:color .3s; }
+    .svc-card:hover .svc-num { color:rgba(212,175,55,.12); }
+    .svc-icon { font-size:1.8rem; margin-bottom:16px; display:block; }
+    .svc-card h3 { font-family:'Cinzel',serif; font-size:1.1rem; margin-bottom:10px; color:var(--white); }
+    .svc-card p { font-size:.82rem; color:rgba(232,224,208,.5); line-height:1.7; margin-bottom:20px; }
+    .svc-price-row { display:flex; align-items:center; justify-content:space-between; }
+    .svc-from { font-size:.6rem; color:rgba(232,224,208,.35); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:2px; }
+    .svc-price { font-family:'Cinzel',serif; font-size:1.4rem; font-weight:700; color:var(--gold); }
+    .svc-link { font-size:.65rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); text-decoration:none; opacity:0; transition:opacity .3s; }
+    .svc-card:hover .svc-link { opacity:1; }
 
-    /* ── TESTIMONIALS ── */
-    #testimonials {
-      background: var(--dark2);
-      position: relative;
-      overflow: hidden;
+    /* ─── BARBER ─── */
+    #barber { background:var(--black); }
+    .barber-inner { display:grid; grid-template-columns:1fr 1fr; gap:70px; align-items:center; max-width:1100px; margin:0 auto; }
+    .barber-img-wrap { position:relative; }
+    .barber-photo { width:100%; aspect-ratio:3/4; object-fit:cover; filter:grayscale(20%); }
+    .barber-badge {
+      position:absolute; bottom:-20px; right:-20px;
+      background:var(--gold); color:var(--black);
+      width:100px; height:100px; border-radius:50%;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      text-align:center; font-weight:700;
+      box-shadow:0 0 0 6px var(--black), 0 0 0 8px var(--gold);
     }
-    #testimonials::before {
-      content: '"';
-      font-family: 'Playfair Display', serif;
-      font-size: 30rem;
-      color: rgba(201,168,76,0.03);
-      position: absolute;
-      top: -80px;
-      left: -40px;
-      line-height: 1;
-      pointer-events: none;
-    }
-    .testimonials-header { margin-bottom: 64px; }
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-    .testimonial-card {
-      background: var(--dark);
-      padding: 36px;
-      position: relative;
-      border-bottom: 2px solid transparent;
-      transition: border-color 0.3s;
-    }
-    .testimonial-card:hover { border-bottom-color: var(--gold); }
-    .stars {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 20px;
-    }
-    .stars span { color: var(--gold); font-size: 0.9rem; }
-    .testimonial-card blockquote {
-      font-size: 0.9rem;
-      line-height: 1.8;
-      color: rgba(245,240,232,0.7);
-      font-weight: 300;
-      font-style: italic;
-      margin-bottom: 24px;
-    }
-    .testimonial-author {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .author-avatar {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      object-fit: cover;
-      filter: grayscale(30%);
-    }
-    .author-name {
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-bottom: 2px;
-    }
-    .author-meta {
-      font-size: 0.72rem;
-      color: var(--gold);
-      letter-spacing: 1px;
-    }
+    .barber-badge big { font-family:'Cinzel',serif; font-size:1.6rem; line-height:1; }
+    .barber-badge small { font-size:.55rem; letter-spacing:1px; text-transform:uppercase; }
+    .barber-info .s-title { margin-bottom:8px; }
+    .barber-name { font-family:'Oswald',sans-serif; font-size:2.5rem; font-weight:700; color:var(--gold); letter-spacing:3px; text-transform:uppercase; margin-bottom:20px; }
+    .barber-info p { color:rgba(232,224,208,.6); line-height:1.8; font-size:.9rem; font-weight:400; margin-bottom:14px; }
+    .barber-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:24px; }
+    .barber-tag { border:1px solid rgba(212,175,55,.25); color:rgba(212,175,55,.8); padding:5px 14px; font-size:.7rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; }
 
-    /* ── PRICING FULL ── */
-    #pricing { background: var(--black); }
-    .pricing-header { margin-bottom: 64px; text-align: center; }
-    .pricing-header .section-label { justify-content: center; }
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .pricing-card {
-      background: var(--dark2);
-      padding: 48px 40px;
-      position: relative;
-      text-align: center;
-      transition: transform 0.3s;
-    }
-    .pricing-card:hover { transform: translateY(-6px); }
-    .pricing-card.featured {
-      background: var(--dark3);
-      border: 1px solid var(--gold);
-    }
-    .pricing-badge {
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--gold);
-      color: var(--black);
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 4px 16px;
-    }
-    .pricing-plan {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 20px;
-    }
-    .pricing-value {
-      font-family: 'Playfair Display', serif;
-      font-size: 3.5rem;
-      font-weight: 700;
-      color: var(--white);
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-    .pricing-value sup {
-      font-size: 1.2rem;
-      vertical-align: top;
-      margin-top: 10px;
-    }
-    .pricing-period {
-      font-size: 0.75rem;
-      color: rgba(245,240,232,0.4);
-      margin-bottom: 36px;
-    }
-    .pricing-features {
-      list-style: none;
-      margin-bottom: 40px;
-      text-align: left;
-    }
-    .pricing-features li {
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      font-size: 0.85rem;
-      color: rgba(245,240,232,0.7);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .pricing-features li::before {
-      content: '✓';
-      color: var(--gold);
-      font-size: 0.75rem;
-      flex-shrink: 0;
-    }
-    .pricing-features li.no::before {
-      content: '×';
-      color: rgba(245,240,232,0.2);
-    }
-    .pricing-features li.no {
-      color: rgba(245,240,232,0.3);
-    }
+    /* ─── GALLERY ─── */
+    #gallery { background:var(--dark); padding-bottom:0; }
+    .gallery-header { margin-bottom:40px; }
+    .gallery-grid { display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:260px 260px; gap:3px; }
+    .g-item { overflow:hidden; position:relative; }
+    .g-item:first-child { grid-column:span 2; grid-row:span 2; }
+    .g-item img { width:100%; height:100%; object-fit:cover; filter:grayscale(35%); transition:all .5s; }
+    .g-item:hover img { filter:grayscale(0%); transform:scale(1.06); }
 
-    /* ── BOOKING ── */
-    #agendamento {
-      background: var(--dark);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
-    }
-    .booking-info .section-title { margin-bottom: 20px; }
-    .booking-info > p {
-      color: rgba(245,240,232,0.6);
-      line-height: 1.8;
-      font-weight: 300;
-      margin-bottom: 40px;
-    }
-    .contact-items { display: flex; flex-direction: column; gap: 24px; }
-    .contact-item {
-      display: flex;
-      gap: 18px;
-      align-items: center;
-    }
-    .contact-item-icon {
-      width: 48px;
-      height: 48px;
-      background: rgba(201,168,76,0.08);
-      border: 1px solid rgba(201,168,76,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-    }
-    .contact-item h4 {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 4px;
-    }
-    .contact-item p {
-      font-size: 0.9rem;
-      color: rgba(245,240,232,0.7);
-    }
-    .booking-form {
-      background: var(--dark2);
-      padding: 48px;
-    }
-    .form-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      margin-bottom: 32px;
-      color: var(--white);
-    }
-    .form-group { margin-bottom: 20px; }
-    .form-group label {
-      display: block;
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 8px;
-    }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      background: var(--dark);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: var(--light);
-      padding: 14px 18px;
-      font-family: 'Barlow', sans-serif;
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.3s;
-      appearance: none;
-    }
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: var(--gold);
-    }
-    .form-group select option { background: var(--dark); }
-    .form-group textarea { height: 100px; resize: vertical; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .btn-form {
-      width: 100%;
-      background: var(--gold);
-      color: var(--black);
-      border: none;
-      padding: 16px;
-      font-family: 'Barlow', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.3s;
-      margin-top: 8px;
-    }
-    .btn-form:hover { background: var(--gold-light); }
+    /* ─── TESTIMONIALS ─── */
+    #testimonials { background:var(--dark2); }
+    .testi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:52px; }
+    .testi-card { background:var(--dark); padding:32px; border-bottom:2px solid transparent; transition:border-color .3s; }
+    .testi-card:hover { border-bottom-color:var(--gold); }
+    .stars { color:var(--gold); margin-bottom:16px; font-size:.9rem; letter-spacing:2px; }
+    .testi-card blockquote { font-size:.88rem; line-height:1.8; color:rgba(232,224,208,.65); font-weight:400; font-style:italic; margin-bottom:20px; }
+    .testi-author { display:flex; align-items:center; gap:12px; }
+    .testi-avatar { width:42px; height:42px; border-radius:50%; object-fit:cover; filter:grayscale(30%); }
+    .testi-name { font-weight:600; font-size:.88rem; }
+    .testi-meta { font-size:.7rem; color:var(--gold); letter-spacing:1px; }
 
-    /* ── MAP ── */
-    #localizacao {
-      background: var(--black);
-      padding: 0;
-    }
-    .map-container {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      min-height: 500px;
-    }
-    .map-info {
-      background: var(--gold);
-      padding: 60px 48px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .map-info h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      color: var(--black);
-      margin-bottom: 32px;
-    }
-    .map-detail {
-      display: flex;
-      gap: 14px;
-      margin-bottom: 24px;
-      align-items: flex-start;
-    }
-    .map-detail-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
-    .map-detail h4 {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: rgba(0,0,0,0.6);
-      margin-bottom: 4px;
-    }
-    .map-detail p {
-      font-size: 0.88rem;
-      color: rgba(0,0,0,0.8);
-      line-height: 1.5;
-    }
-    .map-embed {
-      background: #1a1a1a;
-      min-height: 500px;
-      position: relative;
-      overflow: hidden;
-    }
-    .map-embed iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      filter: grayscale(30%) invert(90%) hue-rotate(180deg);
-    }
-    .map-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(10,10,10,0.5);
-      color: var(--gold);
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      pointer-events: none;
-    }
+    /* ─── BOOKING ─── */
+    #agendamento { background:var(--dark3); display:grid; grid-template-columns:1fr 1fr; gap:70px; align-items:center; }
+    .bk-info .s-title { margin-bottom:16px; }
+    .bk-info > p { color:rgba(232,224,208,.55); line-height:1.8; font-size:.9rem; font-weight:400; margin-bottom:36px; }
+    .contact-list { display:flex; flex-direction:column; gap:20px; }
+    .c-item { display:flex; gap:16px; align-items:center; }
+    .c-icon { width:44px; height:44px; background:rgba(212,175,55,.08); border:1px solid rgba(212,175,55,.2); display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+    .c-item h4 { font-size:.65rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:3px; }
+    .c-item p { font-size:.88rem; color:rgba(232,224,208,.65); }
+    .bk-form { background:var(--dark2); padding:44px; }
+    .form-h { font-family:'Cinzel',serif; font-size:1.3rem; color:var(--white); margin-bottom:28px; }
 
-    /* ── FOOTER ── */
-    footer {
-      background: var(--dark2);
-      border-top: 1px solid rgba(255,255,255,0.05);
+    /* MODO CHEGADA NO FORM */
+    #form-agendamento { transition:all .3s; }
+    #aviso-chegada {
+      display:none;
+      background:rgba(192,57,43,.1);
+      border:1px solid rgba(192,57,43,.4);
+      padding:20px;
+      text-align:center;
+      margin-bottom:20px;
     }
-    .footer-main {
-      padding: 80px 60px 60px;
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 48px;
-    }
-    .footer-brand .nav-logo {
-      font-size: 1.8rem;
-      display: block;
-      margin-bottom: 16px;
-    }
-    .footer-brand p {
-      font-size: 0.85rem;
-      color: rgba(245,240,232,0.5);
-      line-height: 1.7;
-      font-weight: 300;
-      max-width: 280px;
-      margin-bottom: 24px;
-    }
-    .social-links { display: flex; gap: 10px; }
-    .social-links a {
-      width: 38px; height: 38px;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(245,240,232,0.5);
-      font-size: 0.85rem;
-      text-decoration: none;
-      transition: all 0.3s;
-    }
-    .social-links a:hover { border-color: var(--gold); color: var(--gold); }
-    .footer-col h4 {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 20px;
-    }
-    .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: 10px; }
-    .footer-col ul li a {
-      color: rgba(245,240,232,0.5);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: color 0.3s;
-      font-weight: 300;
-    }
-    .footer-col ul li a:hover { color: var(--gold); }
-    .footer-hours p {
-      font-size: 0.82rem;
-      color: rgba(245,240,232,0.5);
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      font-weight: 300;
-    }
-    .footer-hours p span:last-child { color: rgba(245,240,232,0.3); }
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.05);
-      padding: 24px 60px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .footer-bottom p {
-      font-size: 0.75rem;
-      color: rgba(245,240,232,0.3);
-      font-weight: 300;
-    }
-    .footer-bottom a {
-      color: var(--gold);
-      text-decoration: none;
-    }
+    #aviso-chegada.show { display:block; }
+    #aviso-chegada h3 { font-family:'Oswald',sans-serif; font-size:1.1rem; color:var(--red); letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; }
+    #aviso-chegada p { font-size:.85rem; color:rgba(232,224,208,.7); }
 
-    /* ── WHATSAPP FLOAT ── */
-    .whatsapp-float {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      width: 56px;
-      height: 56px;
-      background: #25D366;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      text-decoration: none;
-      z-index: 999;
-      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-      animation: waPulse 2.5s ease-in-out infinite;
+    .fg { margin-bottom:18px; }
+    .fg label { display:block; font-size:.65rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:7px; }
+    .fg input,.fg select,.fg textarea {
+      width:100%; background:var(--dark); border:1px solid rgba(255,255,255,.07);
+      color:var(--light); padding:13px 16px; font-family:'Rajdhani',sans-serif; font-size:.9rem; outline:none; transition:border-color .3s; appearance:none;
     }
-    @keyframes waPulse {
-      0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
-      50% { box-shadow: 0 4px 40px rgba(37,211,102,0.7); }
-    }
+    .fg input:focus,.fg select:focus,.fg textarea:focus { border-color:var(--gold); }
+    .fg select option { background:var(--dark); }
+    .fg textarea { height:90px; resize:vertical; }
+    .fg-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .btn-book { width:100%; background:var(--gold); color:var(--black); border:none; padding:15px; font-family:'Rajdhani',sans-serif; font-size:.8rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:background .3s; margin-top:6px; }
+    .btn-book:hover { background:var(--gold2); }
 
-    /* ── MOBILE NAV ── */
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(10,10,10,0.98);
-      z-index: 999;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 32px;
-    }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu a {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      color: var(--light);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-    .mobile-menu a:hover { color: var(--gold); }
-    .mobile-close {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-      background: none;
-      border: none;
-      color: var(--gold);
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
+    /* ─── FOOTER ─── */
+    footer { background:var(--dark2); border-top:1px solid rgba(255,255,255,.04); }
+    .footer-main { padding:70px 48px 48px; display:grid; grid-template-columns:2fr 1fr 1fr; gap:48px; }
+    .ft-brand .nav-logo { display:flex; margin-bottom:14px; }
+    .ft-brand p { font-size:.82rem; color:rgba(232,224,208,.45); line-height:1.7; max-width:260px; margin-bottom:20px; font-weight:400; }
+    .social-row { display:flex; gap:8px; }
+    .social-row a { width:36px; height:36px; border:1px solid rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center; color:rgba(232,224,208,.45); font-size:.75rem; text-decoration:none; transition:all .3s; }
+    .social-row a:hover { border-color:var(--gold); color:var(--gold); }
+    .ft-col h4 { font-size:.65rem; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:18px; }
+    .ft-col ul { list-style:none; }
+    .ft-col ul li { margin-bottom:8px; }
+    .ft-col ul li a { color:rgba(232,224,208,.45); text-decoration:none; font-size:.83rem; transition:color .3s; font-weight:400; }
+    .ft-col ul li a:hover { color:var(--gold); }
+    .ft-hours p { font-size:.8rem; color:rgba(232,224,208,.45); margin-bottom:7px; display:flex; justify-content:space-between; font-weight:400; }
+    .ft-hours p span:last-child { color:rgba(232,224,208,.25); }
+    .footer-bottom { border-top:1px solid rgba(255,255,255,.04); padding:20px 48px; display:flex; justify-content:space-between; }
+    .footer-bottom p { font-size:.72rem; color:rgba(232,224,208,.25); }
+    .footer-bottom a { color:var(--gold); text-decoration:none; }
 
-    /* ── ANIMATIONS ── */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    /* ─── WHATSAPP FLOAT ─── */
+    .wa-float { position:fixed; bottom:28px; right:28px; width:54px; height:54px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.4rem; text-decoration:none; z-index:998; box-shadow:0 4px 20px rgba(37,211,102,.35); animation:waPulse 2.5s ease-in-out infinite; }
+    @keyframes waPulse { 0%,100%{box-shadow:0 4px 18px rgba(37,211,102,.3);} 50%{box-shadow:0 4px 36px rgba(37,211,102,.65);} }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 1200px) {
-      .team-grid { grid-template-columns: repeat(2, 1fr); }
-      .footer-main { grid-template-columns: 1fr 1fr; }
+    /* ─── MOBILE MENU ─── */
+    .mobile-menu { display:none; position:fixed; inset:0; background:rgba(5,5,5,.98); z-index:999; flex-direction:column; align-items:center; justify-content:center; gap:28px; }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu a { font-family:'Cinzel',serif; font-size:1.8rem; color:var(--light); text-decoration:none; transition:color .3s; }
+    .mobile-menu a:hover { color:var(--gold); }
+    .m-close { position:absolute; top:22px; right:22px; background:none; border:none; color:var(--gold); font-size:1.5rem; cursor:pointer; }
+
+    /* ─── ADMIN OVERLAY ─── */
+    #admin-overlay {
+      display:none; position:fixed; inset:0; z-index:9999;
+      background:rgba(5,5,5,.97); overflow-y:auto;
     }
-    @media (max-width: 900px) {
-      nav { padding: 20px 24px; }
-      nav.scrolled { padding: 14px 24px; }
-      .nav-links, .nav-cta { display: none; }
-      .hamburger { display: flex; }
-      section { padding: 70px 24px; }
-      #hero { padding: 0; }
-      .hero-content { padding: 0 24px; }
-      .hero-stats { right: 24px; bottom: 40px; gap: 28px; }
-      .hero-scroll { left: 24px; bottom: 40px; }
-      #about { grid-template-columns: 1fr; gap: 40px; }
-      .about-images { height: 400px; }
-      .services-grid { grid-template-columns: 1fr; }
-      .services-header { flex-direction: column; gap: 16px; align-items: flex-start; }
-      .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
-      .gallery-item:first-child { grid-column: span 2; }
-      .team-grid { grid-template-columns: repeat(2, 1fr); }
-      .testimonials-grid { grid-template-columns: 1fr; }
-      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
-      #agendamento { grid-template-columns: 1fr; }
-      .booking-form { padding: 32px 24px; }
-      .map-container { grid-template-columns: 1fr; }
-      .map-embed { min-height: 300px; }
-      .footer-main { grid-template-columns: 1fr; padding: 60px 24px 40px; }
-      .footer-bottom { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    #admin-overlay.open { display:block; }
+    .admin-wrap { max-width:900px; margin:0 auto; padding:48px 24px 80px; }
+    .admin-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:36px; border-bottom:1px solid rgba(212,175,55,.2); padding-bottom:24px; }
+    .admin-header h1 { font-family:'Cinzel',serif; font-size:1.6rem; color:var(--gold); }
+    .admin-close { background:none; border:1px solid rgba(255,255,255,.1); color:rgba(255,255,255,.5); padding:8px 16px; font-family:'Rajdhani',sans-serif; font-size:.75rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .3s; }
+    .admin-close:hover { border-color:var(--red); color:var(--red); }
+    .admin-section { background:var(--dark2); padding:28px; margin-bottom:20px; }
+    .admin-section h2 { font-family:'Oswald',sans-serif; font-size:1rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+    .admin-section h2 .tag { background:rgba(212,175,55,.1); border:1px solid rgba(212,175,55,.2); padding:2px 10px; font-size:.6rem; border-radius:0; }
+
+    /* TOGGLE SWITCH */
+    .toggle-row { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.05); }
+    .toggle-row:last-child { border-bottom:none; }
+    .toggle-label { font-size:.88rem; color:rgba(232,224,208,.75); font-weight:500; }
+    .toggle-desc { font-size:.75rem; color:rgba(232,224,208,.35); margin-top:2px; }
+    .toggle { position:relative; width:46px; height:24px; flex-shrink:0; }
+    .toggle input { opacity:0; width:0; height:0; }
+    .toggle-slider { position:absolute; inset:0; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); cursor:pointer; transition:all .3s; }
+    .toggle-slider::before { content:''; position:absolute; height:16px; width:16px; left:3px; bottom:3px; background:rgba(255,255,255,.3); transition:.3s; }
+    .toggle input:checked + .toggle-slider { background:rgba(212,175,55,.2); border-color:var(--gold); }
+    .toggle input:checked + .toggle-slider::before { transform:translateX(22px); background:var(--gold); }
+
+    /* ADMIN PRICE GRID */
+    .price-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    .price-item { background:var(--dark3); padding:14px 16px; }
+    .price-item label { display:block; font-size:.65rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:6px; }
+    .price-item input { width:100%; background:var(--dark); border:1px solid rgba(255,255,255,.07); color:var(--light); padding:9px 12px; font-family:'Rajdhani',sans-serif; font-size:.95rem; outline:none; transition:border-color .3s; }
+    .price-item input:focus { border-color:var(--gold); }
+
+    /* PROMO ADMIN */
+    .promo-admin-fields { display:flex; flex-direction:column; gap:12px; }
+    .promo-admin-fields label { font-size:.65rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:4px; display:block; }
+    .promo-admin-fields input, .promo-admin-fields textarea {
+      width:100%; background:var(--dark3); border:1px solid rgba(255,255,255,.07);
+      color:var(--light); padding:10px 14px; font-family:'Rajdhani',sans-serif; font-size:.9rem; outline:none; transition:border-color .3s;
     }
-    @media (max-width: 600px) {
-      .hero-title { font-size: 2.6rem; }
-      .hero-stats { display: none; }
-      .gallery-grid { grid-template-columns: 1fr; }
-      .gallery-item:first-child { grid-column: span 1; }
-      .gallery-grid { grid-template-rows: auto; }
-      .team-grid { grid-template-columns: 1fr; }
-      .about-features { grid-template-columns: 1fr; }
-      .form-row { grid-template-columns: 1fr; }
+    .promo-admin-fields input:focus, .promo-admin-fields textarea:focus { border-color:var(--gold); }
+    .promo-admin-fields textarea { height:80px; resize:vertical; }
+
+    .admin-save { width:100%; background:var(--gold); color:var(--black); border:none; padding:15px; font-family:'Rajdhani',sans-serif; font-size:.85rem; font-weight:700; letter-spacing:3px; text-transform:uppercase; cursor:pointer; transition:background .3s; margin-top:8px; }
+    .admin-save:hover { background:var(--gold2); }
+    .save-feedback { text-align:center; padding:10px; font-size:.75rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--gold); display:none; }
+    .save-feedback.show { display:block; }
+
+    /* LOGIN */
+    #admin-login {
+      display:none; position:fixed; inset:0; z-index:10000;
+      background:rgba(5,5,5,.98);
+      align-items:center; justify-content:center; flex-direction:column; gap:0;
     }
-    #cursor, #cursor-ring { display: none; }
-    @media (hover: hover) {
-      #cursor, #cursor-ring { display: block; }
-      body { cursor: none; }
+    #admin-login.open { display:flex; }
+    .login-box { background:var(--dark2); padding:48px; width:100%; max-width:380px; }
+    .login-box h2 { font-family:'Cinzel',serif; font-size:1.4rem; color:var(--gold); margin-bottom:6px; }
+    .login-box p { font-size:.8rem; color:rgba(232,224,208,.4); margin-bottom:28px; }
+    .login-box .fg label { color:var(--gold); }
+    .login-box input { background:var(--dark); border:1px solid rgba(255,255,255,.07); color:var(--light); padding:13px 16px; font-family:'Rajdhani',sans-serif; font-size:.95rem; outline:none; width:100%; transition:border-color .3s; }
+    .login-box input:focus { border-color:var(--gold); }
+    .btn-login { width:100%; background:var(--gold); color:var(--black); border:none; padding:14px; font-family:'Rajdhani',sans-serif; font-size:.82rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; cursor:pointer; margin-top:8px; transition:background .3s; }
+    .btn-login:hover { background:var(--gold2); }
+    .login-error { color:var(--red); font-size:.78rem; margin-top:8px; display:none; }
+    .login-cancel { width:100%; background:none; border:1px solid rgba(255,255,255,.1); color:rgba(232,224,208,.4); padding:11px; font-family:'Rajdhani',sans-serif; font-size:.75rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; cursor:pointer; margin-top:8px; transition:all .3s; }
+    .login-cancel:hover { border-color:rgba(255,255,255,.25); color:rgba(232,224,208,.7); }
+
+    /* ─── FADE-IN ─── */
+    .fi { opacity:0; transform:translateY(28px); transition:opacity .7s ease,transform .7s ease; }
+    .fi.vis { opacity:1; transform:translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:900px){
+      nav{padding:16px 20px;}
+      nav.scrolled{padding:12px 20px;}
+      .nav-links,.nav-cta,.btn-admin{display:none;}
+      .hamburger{display:flex;}
+      section{padding:60px 20px;}
+      #hero{padding:0;}
+      .hero-content{padding:0 20px;}
+      .services-grid{grid-template-columns:1fr;}
+      .services-header{flex-direction:column;gap:14px;align-items:flex-start;}
+      .barber-inner{grid-template-columns:1fr;gap:40px;}
+      .gallery-grid{grid-template-columns:repeat(2,1fr);grid-template-rows:auto;}
+      .g-item:first-child{grid-column:span 2;}
+      .testi-grid{grid-template-columns:1fr;}
+      #agendamento{grid-template-columns:1fr;}
+      .bk-form{padding:28px 20px;}
+      .footer-main{grid-template-columns:1fr;padding:48px 20px 36px;}
+      .footer-bottom{padding:16px 20px;flex-direction:column;gap:6px;text-align:center;}
+      .price-grid{grid-template-columns:1fr;}
+    }
+    @media(max-width:600px){
+      .hero-title{font-size:2.8rem;}
+      .gallery-grid{grid-template-columns:1fr;}
+      .g-item:first-child{grid-column:span 1;}
+      .fg-row{grid-template-columns:1fr;}
+      .admin-wrap{padding:28px 16px 60px;}
     }
   </style>
 </head>
 <body>
 
-  <!-- CURSOR -->
-  <div id="cursor"></div>
-  <div id="cursor-ring"></div>
+<!-- ── WHATSAPP ── -->
+<a href="https://wa.me/5577999999999?text=Olá!%20Vim%20pelo%20site%20e%20gostaria%20de%20agendar%20um%20horário." class="wa-float" target="_blank">📱</a>
 
-  <!-- WHATSAPP -->
-  <a href="https://wa.me/5571999999999?text=Olá!%20Gostaria%20de%20agendar%20um%20horário." class="whatsapp-float" target="_blank" title="Fale conosco no WhatsApp">📱</a>
+<!-- ── MOBILE MENU ── -->
+<nav id="mobile-nav" class="mobile-menu">
+  <button class="m-close" onclick="toggleMenu()">✕</button>
+  <a href="#hero" onclick="toggleMenu()">Início</a>
+  <a href="#services" onclick="toggleMenu()">Serviços</a>
+  <a href="#barber" onclick="toggleMenu()">Barbeiro</a>
+  <a href="#gallery" onclick="toggleMenu()">Galeria</a>
+  <a href="#agendamento" onclick="toggleMenu()">Agendar</a>
+  <a href="javascript:void(0)" onclick="toggleMenu();openAdminLogin();" style="font-size:1rem;color:rgba(232,224,208,.3);letter-spacing:3px;">⚙ Admin</a>
+</nav>
 
-  <!-- MOBILE MENU -->
-  <nav id="mobile-menu" class="mobile-menu">
-    <button class="mobile-close" onclick="toggleMenu()">✕</button>
-    <a href="#hero" onclick="toggleMenu()">Início</a>
-    <a href="#about" onclick="toggleMenu()">Sobre</a>
-    <a href="#services" onclick="toggleMenu()">Serviços</a>
-    <a href="#team" onclick="toggleMenu()">Barbeiros</a>
-    <a href="#gallery" onclick="toggleMenu()">Galeria</a>
-    <a href="#agendamento" onclick="toggleMenu()">Agendar</a>
-  </nav>
-
-  <!-- NAV -->
-  <nav id="navbar">
-    <a href="#" class="nav-logo">Corte<span>Nobre</span></a>
-    <ul class="nav-links">
-      <li><a href="#about">Sobre</a></li>
-      <li><a href="#services">Serviços</a></li>
-      <li><a href="#gallery">Galeria</a></li>
-      <li><a href="#team">Barbeiros</a></li>
-      <li><a href="#testimonials">Avaliações</a></li>
-    </ul>
-    <a href="#agendamento" class="nav-cta">Agendar Horário</a>
-    <div class="hamburger" onclick="toggleMenu()">
-      <span></span><span></span><span></span>
+<!-- ── LOGIN ADMIN ── -->
+<div id="admin-login">
+  <div class="login-box">
+    <h2>Painel Admin</h2>
+    <p>Acesso restrito ao proprietário</p>
+    <div class="fg">
+      <label>Senha</label>
+      <input type="password" id="admin-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-  </nav>
+    <div class="login-error" id="login-err">Senha incorreta. Tente novamente.</div>
+    <button class="btn-login" onclick="doLogin()">Entrar</button>
+    <button class="login-cancel" onclick="closeAdminLogin()">Cancelar</button>
+  </div>
+</div>
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-content">
-      <div class="hero-label">
-        <span>Desde 2010 · Salvador, BA</span>
-      </div>
-      <h1 class="hero-title">
-        A Arte do<br>
-        <em>Corte Perfeito</em>
-      </h1>
-      <p class="hero-subtitle">
-        Mais do que uma barbearia — uma experiência. Precisão, estilo e um ambiente onde cada detalhe é pensado para você.
-      </p>
-      <div class="hero-buttons">
-        <a href="#agendamento" class="btn-primary">Agendar Agora</a>
-        <a href="#services" class="btn-secondary">Ver Serviços</a>
-      </div>
+<!-- ── ADMIN PANEL ── -->
+<div id="admin-overlay">
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h1>⚙ Painel Administrativo — RHD Cortes</h1>
+      <button class="admin-close" onclick="closeAdmin()">✕ Sair</button>
     </div>
-    <div class="hero-stats">
-      <div class="stat">
-        <div class="stat-number">5k+</div>
-        <div class="stat-label">Clientes</div>
+
+    <!-- TOGGLES -->
+    <div class="admin-section">
+      <h2>🔧 Controles do Site <span class="tag">Ativo/Inativo</span></h2>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">🚨 Modo Ordem de Chegada</div>
+          <div class="toggle-desc">Cancela agendamentos online — atendimento por chegada</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-chegada" onchange="applySettings()">
+          <span class="toggle-slider"></span>
+        </label>
       </div>
-      <div class="stat">
-        <div class="stat-number">15</div>
-        <div class="stat-label">Anos</div>
-      </div>
-      <div class="stat">
-        <div class="stat-number">4.9</div>
-        <div class="stat-label">Avaliação</div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">🎯 Exibir Seção de Promoção</div>
+          <div class="toggle-desc">Ativa o banner de promoção na página inicial</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-promo" onchange="applySettings()">
+          <span class="toggle-slider"></span>
+        </label>
       </div>
     </div>
-    <div class="hero-scroll">
-      <div class="hero-scroll-line"></div>
-      <span>Rolar</span>
-    </div>
-  </section>
 
-  <!-- MARQUEE -->
-  <div class="marquee-section">
-    <div class="marquee-track">
-      <span>Corte Clássico</span><span class="sep">·</span>
-      <span>Barba Modelada</span><span class="sep">·</span>
-      <span>Hot Towel Shave</span><span class="sep">·</span>
-      <span>Pigmentação</span><span class="sep">·</span>
-      <span>Sobrancelha</span><span class="sep">·</span>
-      <span>Hidratação</span><span class="sep">·</span>
-      <span>Combo Premium</span><span class="sep">·</span>
-      <span>Coloração</span><span class="sep">·</span>
-      <span>Corte Clássico</span><span class="sep">·</span>
-      <span>Barba Modelada</span><span class="sep">·</span>
-      <span>Hot Towel Shave</span><span class="sep">·</span>
-      <span>Pigmentação</span><span class="sep">·</span>
-      <span>Sobrancelha</span><span class="sep">·</span>
-      <span>Hidratação</span><span class="sep">·</span>
-      <span>Combo Premium</span><span class="sep">·</span>
-      <span>Coloração</span><span class="sep">·</span>
+    <!-- PROMOÇÃO -->
+    <div class="admin-section">
+      <h2>🎯 Configurar Promoção</h2>
+      <div class="promo-admin-fields">
+        <div>
+          <label>Título da Promoção</label>
+          <input type="text" id="promo-titulo" placeholder="Ex: Promoção de Segunda!" value="Promoção Especial!">
+        </div>
+        <div>
+          <label>Descrição</label>
+          <textarea id="promo-desc" placeholder="Descreva a promoção...">Aproveite nossa oferta especial por tempo limitado.</textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label>Preço Original (R$)</label>
+            <input type="text" id="promo-de" placeholder="Ex: 80,00">
+          </div>
+          <div>
+            <label>Preço Promocional (R$)</label>
+            <input type="text" id="promo-por" placeholder="Ex: 60,00">
+          </div>
+        </div>
+        <div>
+          <label>Serviço(s) incluído(s)</label>
+          <input type="text" id="promo-servico" placeholder="Ex: Corte + Barba">
+        </div>
+      </div>
+    </div>
+
+    <!-- PREÇOS -->
+    <div class="admin-section">
+      <h2>💰 Preços dos Serviços</h2>
+      <div class="price-grid">
+        <div class="price-item">
+          <label>✂️ Corte Masculino (R$)</label>
+          <input type="number" id="p-corte" value="40" min="0">
+        </div>
+        <div class="price-item">
+          <label>🧔 Barba Modelada (R$)</label>
+          <input type="number" id="p-barba" value="30" min="0">
+        </div>
+        <div class="price-item">
+          <label>⭐ Combo (Corte + Barba) (R$)</label>
+          <input type="number" id="p-combo" value="65" min="0">
+        </div>
+        <div class="price-item">
+          <label>🔥 Hot Towel Shave (R$)</label>
+          <input type="number" id="p-hotshave" value="50" min="0">
+        </div>
+        <div class="price-item">
+          <label>🎨 Pigmentação (R$)</label>
+          <input type="number" id="p-pigm" value="60" min="0">
+        </div>
+        <div class="price-item">
+          <label>💧 Hidratação (R$)</label>
+          <input type="number" id="p-hidrat" value="45" min="0">
+        </div>
+      </div>
+    </div>
+
+    <!-- PLANOS MENSAIS -->
+    <div class="admin-section">
+      <h2>💳 Planos Mensais</h2>
+      <div class="price-grid">
+        <div class="price-item">
+          <label>Plano Básico (R$/mês)</label>
+          <input type="number" id="p-basico" value="89" min="0">
+        </div>
+        <div class="price-item">
+          <label>Plano Premium (R$/mês)</label>
+          <input type="number" id="p-premium" value="149" min="0">
+        </div>
+        <div class="price-item">
+          <label>Plano Black (R$/mês)</label>
+          <input type="number" id="p-black" value="229" min="0">
+        </div>
+        <div class="price-item">
+          <label>Hot Towel Shave — Avulso (R$)</label>
+          <input type="number" id="p-hts2" value="50" min="0">
+        </div>
+      </div>
+    </div>
+
+    <!-- HORÁRIOS -->
+    <div class="admin-section">
+      <h2>🕐 Horário de Funcionamento</h2>
+      <div class="price-grid">
+        <div class="price-item">
+          <label>Seg – Sáb: Abertura</label>
+          <input type="text" id="h-abertura" value="08:00">
+        </div>
+        <div class="price-item">
+          <label>Seg – Sáb: Fechamento</label>
+          <input type="text" id="h-fechamento" value="20:00">
+        </div>
+      </div>
+    </div>
+
+    <button class="admin-save" onclick="saveAdmin()">💾 Salvar Todas as Alterações</button>
+    <div class="save-feedback" id="save-feedback">✓ Alterações salvas com sucesso!</div>
+  </div>
+</div>
+
+<!-- ── NAVBAR ── -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23111' stroke='%23D4AF37' stroke-width='2'/%3E%3Ctext x='50' y='46' font-family='serif' font-size='22' font-weight='bold' fill='%23D4AF37' text-anchor='middle'%3ERHD%3C/text%3E%3Ctext x='50' y='62' font-family='serif' font-size='10' fill='%23888' text-anchor='middle'%3ECORTES%3C/text%3E%3C/svg%3E" id="nav-logo-img" alt="RHD Cortes">
+    <span class="nav-logo-text">RHD Cortes</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Serviços</a></li>
+    <li><a href="#barber">Barbeiro</a></li>
+    <li><a href="#gallery">Galeria</a></li>
+    <li><a href="#testimonials">Avaliações</a></li>
+    <li><a href="#agendamento">Contato</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-admin" onclick="openAdminLogin()">⚙ Admin</button>
+    <a href="#agendamento" class="nav-cta">Agendar</a>
+  </div>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <!-- LOGO RHD — usando a imagem enviada via base64 inline referência -->
+    <img class="hero-logo" id="hero-logo-img"
+      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='95' fill='%230D0D0D' stroke='%23D4AF37' stroke-width='3'/%3E%3Ccircle cx='100' cy='100' r='80' fill='none' stroke='%23D4AF37' stroke-width='1' stroke-dasharray='4 4'/%3E%3Ctext x='100' y='88' font-family='Georgia,serif' font-size='38' font-weight='bold' fill='%23D4AF37' text-anchor='middle'%3ERHD%3C/text%3E%3Crect x='40' y='94' width='120' height='2' fill='%23D4AF37' opacity='.5'/%3E%3Ctext x='100' y='116' font-family='Georgia,serif' font-size='14' fill='%23C8B88A' text-anchor='middle' letter-spacing='4'%3ECORTES%3C/text%3E%3Ctext x='100' y='136' font-family='Georgia,serif' font-size='9' fill='%23666' text-anchor='middle' letter-spacing='2'%3EBARREIRAS · BA%3C/text%3E%3C/svg%3E"
+      alt="RHD Cortes Logo">
+    <div class="hero-tag"><span>Barreiras · BA · Desde 2018</span></div>
+    <h1 class="hero-title">RHD<br><span>Cortes</span></h1>
+    <p class="hero-subtitle">China dos Cortes ✂️</p>
+
+    <!-- MODO CHEGADA BANNER -->
+    <div id="modo-chegada-banner">
+      <h3>⚠ Atendimento por Ordem de Chegada</h3>
+      <p>Agendamentos online temporariamente suspensos. Venha até a barbearia!</p>
+    </div>
+
+    <!-- PROMO NO HERO -->
+    <div class="hero-promo" id="hero-promo-wrap" style="display:none;">
+      🔥 <span id="hero-promo-text"></span>
+    </div>
+
+    <div class="hero-buttons">
+      <a href="#agendamento" class="btn-primary" id="hero-btn-agendar">Agendar Horário</a>
+      <a href="#services" class="btn-outline">Ver Serviços</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Rolar</span>
+  </div>
+</section>
+
+<!-- ── MARQUEE ── -->
+<div class="marquee-bar">
+  <div class="marquee-inner">
+    <span>Corte Masculino</span><span>·</span>
+    <span>Barba Modelada</span><span>·</span>
+    <span>Combo Premium</span><span>·</span>
+    <span>Hot Towel</span><span>·</span>
+    <span>Pigmentação</span><span>·</span>
+    <span>Hidratação</span><span>·</span>
+    <span>Fade</span><span>·</span>
+    <span>Barreiras · BA</span><span>·</span>
+    <span>Corte Masculino</span><span>·</span>
+    <span>Barba Modelada</span><span>·</span>
+    <span>Combo Premium</span><span>·</span>
+    <span>Hot Towel</span><span>·</span>
+    <span>Pigmentação</span><span>·</span>
+    <span>Hidratação</span><span>·</span>
+    <span>Fade</span><span>·</span>
+    <span>Barreiras · BA</span><span>·</span>
+  </div>
+</div>
+
+<!-- ── PROMOÇÃO ── -->
+<section id="promocao">
+  <div class="promo-inner fi">
+    <div class="promo-badge">🔥 Promoção Ativa</div>
+    <h2 class="promo-title" id="promo-titulo-display">Promoção Especial!</h2>
+    <p class="promo-desc" id="promo-desc-display">Aproveite nossa oferta especial por tempo limitado.</p>
+    <div class="promo-price">
+      <s id="promo-de-display"></s>
+      <span id="promo-por-display">—</span>
+    </div>
+    <br><br>
+    <a href="#agendamento" class="btn-primary">Quero Aproveitar</a>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section id="services">
+  <div class="services-header">
+    <div>
+      <div class="s-label"><span>O que fazemos</span></div>
+      <h2 class="s-title">Nossos Serviços</h2>
+    </div>
+    <a href="#agendamento" class="btn-primary">Agendar Agora</a>
+  </div>
+  <div class="services-grid">
+    <div class="svc-card fi">
+      <span class="svc-num">01</span>
+      <span class="svc-icon">✂️</span>
+      <h3>Corte Masculino</h3>
+      <p>Fade, degradê, corte clássico ou moderno. Precisão absoluta em cada detalhe.</p>
+      <div class="svc-price-row">
+        <div><span class="svc-from">a partir de</span><span class="svc-price" id="disp-corte">R$ 40</span></div>
+        <a href="#agendamento" class="svc-link">Agendar →</a>
+      </div>
+    </div>
+    <div class="svc-card fi">
+      <span class="svc-num">02</span>
+      <span class="svc-icon">🧔</span>
+      <h3>Barba Modelada</h3>
+      <p>Modelagem completa com navalha, contorno perfeito e finalização premium.</p>
+      <div class="svc-price-row">
+        <div><span class="svc-from">a partir de</span><span class="svc-price" id="disp-barba">R$ 30</span></div>
+        <a href="#agendamento" class="svc-link">Agendar →</a>
+      </div>
+    </div>
+    <div class="svc-card fi">
+      <span class="svc-num">03</span>
+      <span class="svc-icon">⭐</span>
+      <h3>Combo Completo</h3>
+      <p>Corte + barba + sobrancelha. O pacote completo para o homem que se cuida.</p>
+      <div class="svc-price-row">
+        <div><span class="svc-from">a partir de</span><span class="svc-price" id="disp-combo">R$ 65</span></div>
+        <a href="#agendamento" class="svc-link">Agendar →</a>
+      </div>
+    </div>
+    <div class="svc-card fi">
+      <span class="svc-num">04</span>
+      <span class="svc-icon">🔥</span>
+      <h3>Hot Towel Shave</h3>
+      <p>Barbear tradicional com toalha quente e navalha. Ritual de cavalheiro.</p>
+      <div class="svc-price-row">
+        <div><span class="svc-from">a partir de</span><span class="svc-price" id="disp-hotshave">R$ 50</span></div>
+        <a href="#agendamento" class="svc-link">Agendar →</a>
+      </div>
+    </div>
+    <div class="svc-card fi">
+      <span class="svc-num">05</span>
+      <span class="svc-icon">🎨</span>
+      <h3>Pigmentação</h3>
+      <p>Disfarce de grisalhos e pigmentação de barba com técnicas modernas.</p>
+      <div class="svc-price-row">
+        <div><span class="svc-from">a partir de</span><span class="svc-price" id="disp-pigm">R$ 60</span></div>
+        <a href="#agendamento" class="svc-link">Agendar →</a>
+      </div>
+    </div>
+    <div class="svc-card fi">
+      <span class="svc-num">06</span>
+      <span class="svc-icon">💧</span>
+      <h3>Hidratação Capilar</h3>
+      <p>Tratamento profundo para restaurar e fortalecer os fios. Resultado imediato.</p>
+      <div class="svc-price-row">
+        <div><span class="svc-from">a partir de</span><span class="svc-price" id="disp-hidrat">R$ 45</span></div>
+        <a href="#agendamento" class="svc-link">Agendar →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BARBER ── -->
+<section id="barber">
+  <div class="barber-inner">
+    <div class="barber-img-wrap fi">
+      <img class="barber-photo"
+        src="https://images.unsplash.com/photo-1567894340315-735d7c361db0?w=700&q=80"
+        alt="Richard Lopes — Barbeiro">
+      <div class="barber-badge">
+        <big>7+</big>
+        <small>anos</small>
+      </div>
+    </div>
+    <div class="barber-info fi">
+      <div class="s-label"><span>Seu Barbeiro</span></div>
+      <div class="barber-name">Richard Lopes</div>
+      <h2 class="s-title" style="margin-bottom:20px;">A China dos Cortes</h2>
+      <p>Richard Lopes é o fundador e mestre barbeiro da RHD Cortes. Com mais de 7 anos de experiência e mão precisa, ele se tornou referência em Barreiras e região para quem exige o melhor no corte e na barba.</p>
+      <p>Especialista em fades, degradês e barbas modeladas — cada atendimento é tratado como obra de arte. Atende de segunda a sábado das <span id="disp-abertura">08h</span> às <span id="disp-fechamento">20h</span>.</p>
+      <div class="barber-tags">
+        <span class="barber-tag">Fade Expert</span>
+        <span class="barber-tag">Navalha</span>
+        <span class="barber-tag">Degradê</span>
+        <span class="barber-tag">Barba</span>
+        <span class="barber-tag">Pigmentação</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── GALLERY ── -->
+<section id="gallery">
+  <div class="gallery-header fi">
+    <div class="s-label"><span>Trabalhos Realizados</span></div>
+    <h2 class="s-title">Galeria</h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="g-item fi"><img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=800&q=80" alt="Corte fade"></div>
+    <div class="g-item fi"><img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=600&q=80" alt="Barba"></div>
+    <div class="g-item fi"><img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=600&q=80" alt="Barbearia"></div>
+    <div class="g-item fi"><img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600&q=80" alt="Barbeiro"></div>
+    <div class="g-item fi"><img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=600&q=80" alt="Corte"></div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section id="testimonials">
+  <div class="fi">
+    <div class="s-label"><span>O que dizem</span></div>
+    <h2 class="s-title">Avaliações</h2>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card fi">
+      <div class="stars">★★★★★</div>
+      <blockquote>"Richard manda muito bem! Melhor fade que já fiz em Barreiras. Ambiente show, atendimento top. Só vou aqui!"</blockquote>
+      <div class="testi-author">
+        <img class="testi-avatar" src="https://randomuser.me/api/portraits/men/33.jpg" alt="João">
+        <div><div class="testi-name">João Victor</div><div class="testi-meta">Cliente · Instagram</div></div>
+      </div>
+    </div>
+    <div class="testi-card fi">
+      <div class="stars">★★★★★</div>
+      <blockquote>"Fiz o combo corte + barba e saí transformado. Mão precisa demais, detalhe perfeito. Vale cada centavo!"</blockquote>
+      <div class="testi-author">
+        <img class="testi-avatar" src="https://randomuser.me/api/portraits/men/45.jpg" alt="Mateus">
+        <div><div class="testi-name">Mateus Rocha</div><div class="testi-meta">Cliente · Google</div></div>
+      </div>
+    </div>
+    <div class="testi-card fi">
+      <div class="stars">★★★★★</div>
+      <blockquote>"Recomendo muito a RHD. Richard é atencioso, caprichoso e o preço é justo. Virou minha barbearia fixa sem dúvida!"</blockquote>
+      <div class="testi-author">
+        <img class="testi-avatar" src="https://randomuser.me/api/portraits/men/58.jpg" alt="Anderson">
+        <div><div class="testi-name">Anderson Silva</div><div class="testi-meta">Cliente · WhatsApp</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AGENDAMENTO ── -->
+<section id="agendamento">
+  <div class="bk-info fi">
+    <div class="s-label"><span>Reserve seu horário</span></div>
+    <h2 class="s-title">Agende sua Visita</h2>
+    <p>Resposta rápida pelo WhatsApp. Garanta seu horário com antecedência!</p>
+    <div class="contact-list">
+      <div class="c-item">
+        <div class="c-icon">📍</div>
+        <div><h4>Endereço</h4><p>Rua Ruy Barbosa, 405 — Centro<br>Barreiras, Bahia</p></div>
+      </div>
+      <div class="c-item">
+        <div class="c-icon">📞</div>
+        <div><h4>WhatsApp</h4><p>(77) 9 9999-9999</p></div>
+      </div>
+      <div class="c-item">
+        <div class="c-icon">🕐</div>
+        <div><h4>Horário</h4><p>Segunda a Sábado: <span id="disp-h-abertura">08h</span> às <span id="disp-h-fechamento">20h</span></p></div>
+      </div>
+      <div class="c-item">
+        <div class="c-icon">📸</div>
+        <div><h4>Instagram</h4><p>@rhd_cortes</p></div>
+      </div>
     </div>
   </div>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="about-images fade-in">
-      <img class="about-img-main"
-        src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800&q=80"
-        alt="Barbeiro trabalhando">
-      <img class="about-img-accent"
-        src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=600&q=80"
-        alt="Interior da barbearia">
-      <div class="about-badge">
-        <big>15</big>
-        <small>anos de excelência</small>
-      </div>
-    </div>
-    <div class="about-text fade-in">
-      <div class="section-label"><span>Nossa História</span></div>
-      <h2 class="section-title">Tradição que se reinventa a cada corte</h2>
-      <p>Fundada em 2010, a CorteNobre nasceu da paixão por oferecer ao homem baiano uma experiência de cuidado pessoal verdadeiramente premium — sem abrir mão do ambiente acolhedor e descontraído que só uma barbearia sabe proporcionar.</p>
-      <p>Nossos barbeiros são certificados e apaixonados pelo ofício. Cada visita é personalizada: do corte à barba, tudo é feito com atenção ao detalhe, produtos de alta qualidade e o cuidado de quem trata cada cliente como único.</p>
-      <div class="about-features">
-        <div class="feature-item">
-          <div class="feature-icon">✂️</div>
-          <div>
-            <h4>Técnica Apurada</h4>
-            <p>Treinamento contínuo e certificações internacionais</p>
-          </div>
-        </div>
-        <div class="feature-item">
-          <div class="feature-icon">🏆</div>
-          <div>
-            <h4>Produtos Premium</h4>
-            <p>Linhas profissionais das melhores marcas</p>
-          </div>
-        </div>
-        <div class="feature-item">
-          <div class="feature-icon">🪑</div>
-          <div>
-            <h4>Ambiente Exclusivo</h4>
-            <p>Espaço pensado para o seu conforto total</p>
-          </div>
-        </div>
-        <div class="feature-item">
-          <div class="feature-icon">📅</div>
-          <div>
-            <h4>Agendamento Fácil</h4>
-            <p>Reserve seu horário online em segundos</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <div class="bk-form fi">
+    <h3 class="form-h">Solicitar Agendamento</h3>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="services-header">
-      <div>
-        <div class="section-label"><span>O que oferecemos</span></div>
-        <h2 class="section-title">Nossos Serviços</h2>
-      </div>
-      <a href="#agendamento" class="btn-primary">Agendar Agora</a>
+    <!-- Aviso modo chegada -->
+    <div id="aviso-chegada">
+      <h3>⚠ Agendamentos Suspensos</h3>
+      <p>No momento estamos atendendo por <strong>ordem de chegada</strong>. Venha até a barbearia: Rua Ruy Barbosa, 405 — Centro, Barreiras BA.</p>
     </div>
-    <div class="services-grid">
-      <div class="service-card fade-in">
-        <span class="service-number">01</span>
-        <span class="service-icon">✂️</span>
-        <h3>Corte Masculino</h3>
-        <p>Corte personalizado com acabamento perfeito. Fade, degradê, clássico ou moderno — do jeito que você quer.</p>
-        <div class="service-price">
-          <div>
-            <span class="price-from">a partir de</span>
-            <span class="price">R$ 45</span>
-          </div>
-          <a href="#agendamento" class="service-link">Agendar →</a>
-        </div>
-      </div>
-      <div class="service-card fade-in">
-        <span class="service-number">02</span>
-        <span class="service-icon">🧔</span>
-        <h3>Barba Modelada</h3>
-        <p>Modelagem completa com navalha, definição de contorno e finalização com produtos premium.</p>
-        <div class="service-price">
-          <div>
-            <span class="price-from">a partir de</span>
-            <span class="price">R$ 35</span>
-          </div>
-          <a href="#agendamento" class="service-link">Agendar →</a>
-        </div>
-      </div>
-      <div class="service-card fade-in">
-        <span class="service-number">03</span>
-        <span class="service-icon">⭐</span>
-        <h3>Combo Premium</h3>
-        <p>Corte + barba completa + sobrancelha + hidratação. A experiência completa para o homem que se cuida.</p>
-        <div class="service-price">
-          <div>
-            <span class="price-from">a partir de</span>
-            <span class="price">R$ 95</span>
-          </div>
-          <a href="#agendamento" class="service-link">Agendar →</a>
-        </div>
-      </div>
-      <div class="service-card fade-in">
-        <span class="service-number">04</span>
-        <span class="service-icon">🔥</span>
-        <h3>Hot Towel Shave</h3>
-        <p>Barbear tradicional com toalha quente, navalha e creme artesanal. Ritual de cavalheiro para a pele.</p>
-        <div class="service-price">
-          <div>
-            <span class="price-from">a partir de</span>
-            <span class="price">R$ 55</span>
-          </div>
-          <a href="#agendamento" class="service-link">Agendar →</a>
-        </div>
-      </div>
-      <div class="service-card fade-in">
-        <span class="service-number">05</span>
-        <span class="service-icon">🎨</span>
-        <h3>Pigmentação / Coloração</h3>
-        <p>Disfarce de grisalhos, pigmentação de barba e cabelo com técnicas modernas e produtos profissionais.</p>
-        <div class="service-price">
-          <div>
-            <span class="price-from">a partir de</span>
-            <span class="price">R$ 70</span>
-          </div>
-          <a href="#agendamento" class="service-link">Agendar →</a>
-        </div>
-      </div>
-      <div class="service-card fade-in">
-        <span class="service-number">06</span>
-        <span class="service-icon">💧</span>
-        <h3>Hidratação Capilar</h3>
-        <p>Tratamento profundo para restaurar, brilhar e fortalecer os fios. Ideal após processos químicos.</p>
-        <div class="service-price">
-          <div>
-            <span class="price-from">a partir de</span>
-            <span class="price">R$ 50</span>
-          </div>
-          <a href="#agendamento" class="service-link">Agendar →</a>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- GALLERY -->
-  <section id="gallery">
-    <div class="gallery-header">
-      <div class="section-label"><span>Nosso Trabalho</span></div>
-      <h2 class="section-title">Galeria</h2>
-    </div>
-    <div class="gallery-grid">
-      <div class="gallery-item fade-in">
-        <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=800&q=80" alt="Corte fade">
+    <div id="form-agendamento">
+      <div class="fg-row">
+        <div class="fg"><label>Nome</label><input type="text" id="f-nome" placeholder="Seu nome"></div>
+        <div class="fg"><label>WhatsApp</label><input type="tel" id="f-tel" placeholder="(77) 9 0000-0000"></div>
       </div>
-      <div class="gallery-item fade-in">
-        <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=600&q=80" alt="Barba">
-      </div>
-      <div class="gallery-item fade-in">
-        <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=600&q=80" alt="Barbearia">
-      </div>
-      <div class="gallery-item fade-in">
-        <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600&q=80" alt="Barbeiro">
-      </div>
-      <div class="gallery-item fade-in">
-        <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=600&q=80" alt="Corte">
-      </div>
-    </div>
-  </section>
-
-  <!-- TEAM -->
-  <section id="team">
-    <div class="team-header">
-      <div class="section-label"><span>Quem Cuida de Você</span></div>
-      <h2 class="section-title">Nossos Barbeiros</h2>
-    </div>
-    <div class="team-grid">
-      <div class="barber-card fade-in">
-        <div class="barber-img-wrap">
-          <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=500&q=80" alt="Diego Mendes">
-        </div>
-        <div class="barber-info">
-          <h3>Diego Mendes</h3>
-          <p>Master Barber · 12 anos</p>
-          <div class="barber-social">
-            <a href="#">ig</a>
-            <a href="#">wa</a>
-          </div>
-        </div>
-      </div>
-      <div class="barber-card fade-in">
-        <div class="barber-img-wrap">
-          <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500&q=80" alt="Rafael Costa">
-        </div>
-        <div class="barber-info">
-          <h3>Rafael Costa</h3>
-          <p>Especialista em Fade · 8 anos</p>
-          <div class="barber-social">
-            <a href="#">ig</a>
-            <a href="#">wa</a>
-          </div>
-        </div>
-      </div>
-      <div class="barber-card fade-in">
-        <div class="barber-img-wrap">
-          <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&q=80" alt="Lucas Oliveira">
-        </div>
-        <div class="barber-info">
-          <h3>Lucas Oliveira</h3>
-          <p>Barba & Navalha · 6 anos</p>
-          <div class="barber-social">
-            <a href="#">ig</a>
-            <a href="#">wa</a>
-          </div>
-        </div>
-      </div>
-      <div class="barber-card fade-in">
-        <div class="barber-img-wrap">
-          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&q=80" alt="Thiago Souza">
-        </div>
-        <div class="barber-info">
-          <h3>Thiago Souza</h3>
-          <p>Coloração & Tratamentos · 5 anos</p>
-          <div class="barber-social">
-            <a href="#">ig</a>
-            <a href="#">wa</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section id="testimonials">
-    <div class="testimonials-header">
-      <div class="section-label"><span>O que dizem</span></div>
-      <h2 class="section-title">Avaliações dos Clientes</h2>
-    </div>
-    <div class="testimonials-grid">
-      <div class="testimonial-card fade-in">
-        <div class="stars">
-          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-        </div>
-        <blockquote>"Melhor barbearia de Salvador, sem sombra de dúvida. O Diego tem uma precisão impressionante no degradê. Já fui em vários lugares e nenhum chega perto."</blockquote>
-        <div class="testimonial-author">
-          <img class="author-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Carlos">
-          <div>
-            <div class="author-name">Carlos Eduardo</div>
-            <div class="author-meta">Cliente há 3 anos · Google</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card fade-in">
-        <div class="stars">
-          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-        </div>
-        <blockquote>"Fiz o Combo Premium e saí completamente transformado. Ambiente incrível, equipe atenciosa e resultado impecável. Vale cada centavo do investimento."</blockquote>
-        <div class="testimonial-author">
-          <img class="author-avatar" src="https://randomuser.me/api/portraits/men/44.jpg" alt="Marcos">
-          <div>
-            <div class="author-name">Marcos Andrade</div>
-            <div class="author-meta">Cliente há 2 anos · Google</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card fade-in">
-        <div class="stars">
-          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-        </div>
-        <blockquote>"Indico para todo mundo! O Hot Towel Shave é uma experiência única — parece que você viajou no tempo. Atendimento nota 10 desde a recepção até o final."</blockquote>
-        <div class="testimonial-author">
-          <img class="author-avatar" src="https://randomuser.me/api/portraits/men/52.jpg" alt="João">
-          <div>
-            <div class="author-name">João Pedro Lima</div>
-            <div class="author-meta">Cliente há 4 anos · Instagram</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRICING -->
-  <section id="pricing">
-    <div class="pricing-header">
-      <div class="section-label"><span>Planos & Preços</span></div>
-      <h2 class="section-title">Escolha seu Plano Mensal</h2>
-    </div>
-    <div class="pricing-grid">
-      <div class="pricing-card fade-in">
-        <div class="pricing-plan">Essencial</div>
-        <div class="pricing-value"><sup>R$</sup>89</div>
-        <div class="pricing-period">por mês · 2 visitas</div>
-        <ul class="pricing-features">
-          <li>2 Cortes por mês</li>
-          <li>Desconto 10% em produtos</li>
-          <li>Agendamento prioritário</li>
-          <li class="no">Barba inclusa</li>
-          <li class="no">Combo Premium</li>
-        </ul>
-        <a href="#agendamento" class="btn-primary">Começar Agora</a>
-      </div>
-      <div class="pricing-card featured fade-in">
-        <div class="pricing-badge">Mais Popular</div>
-        <div class="pricing-plan">Premium</div>
-        <div class="pricing-value"><sup>R$</sup>159</div>
-        <div class="pricing-period">por mês · 4 visitas</div>
-        <ul class="pricing-features">
-          <li>4 Cortes + 2 Barbas por mês</li>
-          <li>Desconto 20% em produtos</li>
-          <li>Agendamento VIP</li>
-          <li>1 Sobrancelha por mês</li>
-          <li class="no">Combo Premium</li>
-        </ul>
-        <a href="#agendamento" class="btn-primary">Começar Agora</a>
-      </div>
-      <div class="pricing-card fade-in">
-        <div class="pricing-plan">Black</div>
-        <div class="pricing-value"><sup>R$</sup>249</div>
-        <div class="pricing-period">por mês · ilimitado</div>
-        <ul class="pricing-features">
-          <li>Cortes ilimitados</li>
-          <li>Desconto 30% em produtos</li>
-          <li>Horário exclusivo reservado</li>
-          <li>1 Combo Premium incluso</li>
-          <li>Acesso a eventos exclusivos</li>
-        </ul>
-        <a href="#agendamento" class="btn-primary">Começar Agora</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- BOOKING -->
-  <section id="agendamento">
-    <div class="booking-info fade-in">
-      <div class="section-label"><span>Reserve seu Horário</span></div>
-      <h2 class="section-title">Agende sua Visita</h2>
-      <p>Garanta seu horário com antecedência e evite espera. Resposta em até 5 minutos pelo WhatsApp.</p>
-      <div class="contact-items">
-        <div class="contact-item">
-          <div class="contact-item-icon">📍</div>
-          <div>
-            <h4>Endereço</h4>
-            <p>Rua da Barra, 420 — Barra, Salvador - BA</p>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item-icon">📞</div>
-          <div>
-            <h4>Telefone & WhatsApp</h4>
-            <p>(71) 9 9999-9999</p>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item-icon">🕐</div>
-          <div>
-            <h4>Horário de Funcionamento</h4>
-            <p>Seg – Sex: 9h às 20h<br>Sábado: 8h às 18h</p>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item-icon">📸</div>
-          <div>
-            <h4>Instagram</h4>
-            <p>@cortenobre.ba</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="booking-form fade-in">
-      <h3 class="form-title">Solicitar Agendamento</h3>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Nome Completo</label>
-          <input type="text" placeholder="Seu nome">
-        </div>
-        <div class="form-group">
-          <label>WhatsApp</label>
-          <input type="tel" placeholder="(71) 9 0000-0000">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
+      <div class="fg-row">
+        <div class="fg">
           <label>Serviço</label>
-          <select>
+          <select id="f-svc">
             <option value="">Escolha o serviço</option>
-            <option>Corte Masculino — R$45</option>
-            <option>Barba Modelada — R$35</option>
-            <option>Combo Premium — R$95</option>
-            <option>Hot Towel Shave — R$55</option>
-            <option>Pigmentação — R$70</option>
-            <option>Hidratação — R$50</option>
+            <option id="opt-corte">Corte Masculino</option>
+            <option id="opt-barba">Barba Modelada</option>
+            <option id="opt-combo">Combo (Corte + Barba)</option>
+            <option id="opt-hot">Hot Towel Shave</option>
+            <option id="opt-pigm">Pigmentação</option>
+            <option id="opt-hidrat">Hidratação Capilar</option>
           </select>
         </div>
-        <div class="form-group">
+        <div class="fg">
           <label>Barbeiro</label>
-          <select>
-            <option value="">Sem preferência</option>
-            <option>Diego Mendes</option>
-            <option>Rafael Costa</option>
-            <option>Lucas Oliveira</option>
-            <option>Thiago Souza</option>
-          </select>
+          <select><option>Richard Lopes</option></select>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Data</label>
-          <input type="date">
-        </div>
-        <div class="form-group">
+      <div class="fg-row">
+        <div class="fg"><label>Data</label><input type="date" id="f-data"></div>
+        <div class="fg">
           <label>Horário</label>
-          <select>
-            <option value="">Escolha o horário</option>
-            <option>09:00</option><option>09:30</option>
-            <option>10:00</option><option>10:30</option>
-            <option>11:00</option><option>11:30</option>
-            <option>14:00</option><option>14:30</option>
-            <option>15:00</option><option>15:30</option>
-            <option>16:00</option><option>16:30</option>
-            <option>17:00</option><option>17:30</option>
-            <option>18:00</option><option>18:30</option>
+          <select id="f-hora">
+            <option value="">Escolha</option>
+            <option>08:00</option><option>08:30</option><option>09:00</option><option>09:30</option>
+            <option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option>
+            <option>13:00</option><option>13:30</option><option>14:00</option><option>14:30</option>
+            <option>15:00</option><option>15:30</option><option>16:00</option><option>16:30</option>
+            <option>17:00</option><option>17:30</option><option>18:00</option><option>18:30</option>
             <option>19:00</option><option>19:30</option>
           </select>
         </div>
       </div>
-      <div class="form-group">
-        <label>Observações (opcional)</label>
-        <textarea placeholder="Algum estilo específico? Referência de foto? Conte para nós."></textarea>
-      </div>
-      <button class="btn-form" onclick="handleBooking()">Confirmar Agendamento via WhatsApp</button>
-    </div>
-  </section>
-
-  <!-- MAP -->
-  <div id="localizacao">
-    <div class="map-container">
-      <div class="map-info">
-        <h2>Como Chegar</h2>
-        <div class="map-detail">
-          <span class="map-detail-icon">📍</span>
-          <div>
-            <h4>Endereço</h4>
-            <p>Rua da Barra, 420<br>Barra · Salvador - BA<br>CEP: 40140-130</p>
-          </div>
-        </div>
-        <div class="map-detail">
-          <span class="map-detail-icon">🚌</span>
-          <div>
-            <h4>Transporte Público</h4>
-            <p>Ponto de ônibus a 50m<br>Metrô Campo da Pólvora (15 min)</p>
-          </div>
-        </div>
-        <div class="map-detail">
-          <span class="map-detail-icon">🚗</span>
-          <div>
-            <h4>Estacionamento</h4>
-            <p>Estacionamento conveniado<br>na rua ao lado</p>
-          </div>
-        </div>
-      </div>
-      <div class="map-embed">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.5!2d-38.5147!3d-13.0095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDAwJzM0LjIiUyAzOMKwMzAnNTIuOSJX!5e0!3m2!1spt-BR!2sbr!4v1"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-      </div>
+      <div class="fg"><label>Observações</label><textarea id="f-obs" placeholder="Estilo desejado, referência..."></textarea></div>
+      <button class="btn-book" onclick="bookWhatsapp()">📲 Confirmar via WhatsApp</button>
     </div>
   </div>
+</section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-main">
-      <div class="footer-brand">
-        <a href="#" class="nav-logo">Corte<span>Nobre</span></a>
-        <p>Salvador's finest barbershop. Onde tradição encontra modernidade, e cada corte conta uma história.</p>
-        <div class="social-links">
-          <a href="#">ig</a>
-          <a href="#">fb</a>
-          <a href="#">yt</a>
-          <a href="#">tt</a>
-        </div>
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-main">
+    <div class="ft-brand">
+      <div class="nav-logo" style="margin-bottom:14px;">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23111' stroke='%23D4AF37' stroke-width='2'/%3E%3Ctext x='50' y='46' font-family='serif' font-size='22' font-weight='bold' fill='%23D4AF37' text-anchor='middle'%3ERHD%3C/text%3E%3Ctext x='50' y='62' font-family='serif' font-size='10' fill='%23888' text-anchor='middle'%3ECORTES%3C/text%3E%3C/svg%3E" style="width:42px;height:42px;" alt="RHD">
+        <span class="nav-logo-text" style="font-size:1.1rem;">RHD Cortes</span>
       </div>
-      <div class="footer-col">
-        <h4>Serviços</h4>
-        <ul>
-          <li><a href="#">Corte Masculino</a></li>
-          <li><a href="#">Barba Modelada</a></li>
-          <li><a href="#">Combo Premium</a></li>
-          <li><a href="#">Hot Towel Shave</a></li>
-          <li><a href="#">Pigmentação</a></li>
-          <li><a href="#">Hidratação Capilar</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Links</h4>
-        <ul>
-          <li><a href="#">Sobre Nós</a></li>
-          <li><a href="#">Nossa Equipe</a></li>
-          <li><a href="#">Galeria</a></li>
-          <li><a href="#">Planos Mensais</a></li>
-          <li><a href="#">Fale Conosco</a></li>
-          <li><a href="#">Trabalhe Conosco</a></li>
-        </ul>
-      </div>
-      <div class="footer-col footer-hours">
-        <h4>Horários</h4>
-        <p><span>Segunda – Sexta</span><span>9h – 20h</span></p>
-        <p><span>Sábado</span><span>8h – 18h</span></p>
-        <p><span>Domingo</span><span>Fechado</span></p>
-        <p style="margin-top:16px; font-size:0.8rem; color: rgba(245,240,232,0.35);">(71) 9 9999-9999</p>
-        <p style="font-size:0.8rem; color: rgba(245,240,232,0.35);">contato@cortenobre.com.br</p>
+      <p>A China dos Cortes em Barreiras. Qualidade, estilo e precisão em cada atendimento.</p>
+      <div class="social-row">
+        <a href="https://instagram.com/rhd_cortes" target="_blank">ig</a>
+        <a href="https://wa.me/5577999999999" target="_blank">wa</a>
+        <a href="#">fb</a>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>© 2025 CorteNobre Barbearia · Salvador, BA. Todos os direitos reservados.</p>
-      <p>Desenvolvido com ❤️ · <a href="#">Política de Privacidade</a></p>
+    <div class="ft-col">
+      <h4>Serviços</h4>
+      <ul>
+        <li><a href="#">Corte Masculino</a></li>
+        <li><a href="#">Barba Modelada</a></li>
+        <li><a href="#">Combo Completo</a></li>
+        <li><a href="#">Hot Towel Shave</a></li>
+        <li><a href="#">Pigmentação</a></li>
+        <li><a href="#">Hidratação</a></li>
+      </ul>
     </div>
-  </footer>
+    <div class="ft-col ft-hours">
+      <h4>Horários</h4>
+      <p><span>Segunda – Sábado</span><span id="ft-h">08h – 20h</span></p>
+      <p><span>Domingo</span><span>Fechado</span></p>
+      <p style="margin-top:16px;font-size:.78rem;color:rgba(232,224,208,.3);">Rua Ruy Barbosa, 405<br>Centro · Barreiras - BA</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 RHD Cortes · Barreiras - BA. Todos os direitos reservados.</p>
+    <p><a href="#">@rhd_cortes</a> · linktr.ee/RHDCORTES</p>
+  </div>
+</footer>
 
-  <script>
-    // CURSOR
-    const cursor = document.getElementById('cursor');
-    const cursorRing = document.getElementById('cursor-ring');
-    document.addEventListener('mousemove', e => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-      setTimeout(() => {
-        cursorRing.style.left = e.clientX + 'px';
-        cursorRing.style.top = e.clientY + 'px';
-      }, 80);
-    });
-    document.querySelectorAll('a, button').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursor.style.width = '20px';
-        cursor.style.height = '20px';
-        cursorRing.style.width = '56px';
-        cursorRing.style.height = '56px';
-      });
-      el.addEventListener('mouseleave', () => {
-        cursor.style.width = '10px';
-        cursor.style.height = '10px';
-        cursorRing.style.width = '36px';
-        cursorRing.style.height = '36px';
-      });
-    });
+<script>
+  // ── STATE ──
+  const ADMIN_PASS = 'rhd2025'; // SENHA PADRÃO — altere aqui
+  let settings = {
+    chegada: false,
+    promo: false,
+    promoTitulo: 'Promoção Especial!',
+    promoDesc: 'Aproveite nossa oferta especial por tempo limitado.',
+    promoDe: '',
+    promoPor: '',
+    promoServico: '',
+    prices: { corte:40, barba:30, combo:65, hotshave:50, pigm:60, hidrat:45 },
+    plans: { basico:89, premium:149, black:229 },
+    horario: { abertura:'08:00', fechamento:'20:00' }
+  };
 
-    // NAVBAR SCROLL
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 60);
-    });
+  // ── LOAD FROM STORAGE ──
+  function loadSettings() {
+    const saved = localStorage.getItem('rhd_settings');
+    if (saved) settings = JSON.parse(saved);
+    applySettings();
+    loadAdminFields();
+  }
 
-    // MOBILE MENU
-    function toggleMenu() {
-      document.getElementById('mobile-menu').classList.toggle('open');
+  function applySettings() {
+    // Modo chegada
+    const chegada = document.getElementById('toggle-chegada').checked || settings.chegada;
+    settings.chegada = document.getElementById('toggle-chegada')
+      ? document.getElementById('toggle-chegada').checked
+      : settings.chegada;
+
+    document.getElementById('modo-chegada-banner').classList.toggle('active', settings.chegada);
+    document.getElementById('aviso-chegada').classList.toggle('show', settings.chegada);
+    const formEl = document.getElementById('form-agendamento');
+    if (formEl) {
+      formEl.style.opacity = settings.chegada ? '0.3' : '1';
+      formEl.style.pointerEvents = settings.chegada ? 'none' : 'auto';
+    }
+    const heroBtn = document.getElementById('hero-btn-agendar');
+    if (heroBtn) {
+      heroBtn.textContent = settings.chegada ? 'Ver Endereço' : 'Agendar Horário';
     }
 
-    // FADE IN OBSERVER
-    const fadeEls = document.querySelectorAll('.fade-in');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            entry.target.classList.add('visible');
-          }, 100);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    fadeEls.forEach(el => observer.observe(el));
+    // Promo
+    settings.promo = document.getElementById('toggle-promo')
+      ? document.getElementById('toggle-promo').checked
+      : settings.promo;
+    document.getElementById('promocao').classList.toggle('active', settings.promo);
 
-    // STAGGERED GRID ANIMATIONS
-    document.querySelectorAll('.services-grid .service-card').forEach((el, i) => {
-      el.style.transitionDelay = (i * 0.08) + 's';
+    // Preços display
+    const p = settings.prices;
+    const fmt = v => `R$ ${Number(v).toFixed(0)}`;
+    if(document.getElementById('disp-corte')) document.getElementById('disp-corte').textContent = fmt(p.corte);
+    if(document.getElementById('disp-barba')) document.getElementById('disp-barba').textContent = fmt(p.barba);
+    if(document.getElementById('disp-combo')) document.getElementById('disp-combo').textContent = fmt(p.combo);
+    if(document.getElementById('disp-hotshave')) document.getElementById('disp-hotshave').textContent = fmt(p.hotshave);
+    if(document.getElementById('disp-pigm')) document.getElementById('disp-pigm').textContent = fmt(p.pigm);
+    if(document.getElementById('disp-hidrat')) document.getElementById('disp-hidrat').textContent = fmt(p.hidrat);
+
+    // Horários
+    const h = settings.horario;
+    const ab = h.abertura.replace(':','h').replace(/0$/,'');
+    const fe = h.fechamento.replace(':','h').replace(/0$/,'');
+    ['disp-abertura','disp-fechamento','disp-h-abertura','disp-h-fechamento'].forEach((id,i)=>{
+      const el = document.getElementById(id);
+      if(el) el.textContent = i%2===0 ? ab : fe;
     });
-    document.querySelectorAll('.team-grid .barber-card').forEach((el, i) => {
-      el.style.transitionDelay = (i * 0.1) + 's';
-    });
-    document.querySelectorAll('.testimonials-grid .testimonial-card').forEach((el, i) => {
-      el.style.transitionDelay = (i * 0.1) + 's';
-    });
+    const ftH = document.getElementById('ft-h');
+    if(ftH) ftH.textContent = `${ab} – ${fe}`;
 
-    // BOOKING BUTTON
-    function handleBooking() {
-      const name = document.querySelector('input[placeholder="Seu nome"]').value;
-      const phone = document.querySelector('input[placeholder="(71) 9 0000-0000"]').value;
-      const service = document.querySelectorAll('select')[0].value;
-      const barber = document.querySelectorAll('select')[1].value;
-      const date = document.querySelector('input[type="date"]').value;
-      const time = document.querySelectorAll('select')[2].value;
-      const obs = document.querySelector('textarea').value;
+    // Promo display
+    const pd = document.getElementById('promo-titulo-display');
+    if(pd) pd.textContent = settings.promoTitulo;
+    const pdd = document.getElementById('promo-desc-display');
+    if(pdd) pdd.textContent = settings.promoDesc;
+    const pde = document.getElementById('promo-de-display');
+    if(pde) pde.textContent = settings.promoDe ? `R$ ${settings.promoDe}` : '';
+    const ppe = document.getElementById('promo-por-display');
+    if(ppe) ppe.textContent = settings.promoPor ? `R$ ${settings.promoPor}` : '—';
 
-      let msg = `Olá! Gostaria de agendar um horário na CorteNobre 💈\n\n`;
-      if (name) msg += `*Nome:* ${name}\n`;
-      if (service) msg += `*Serviço:* ${service}\n`;
-      if (barber) msg += `*Barbeiro:* ${barber || 'Sem preferência'}\n`;
-      if (date) msg += `*Data:* ${date}\n`;
-      if (time) msg += `*Horário:* ${time}\n`;
-      if (obs) msg += `*Obs:* ${obs}\n`;
-
-      window.open(`https://wa.me/5571999999999?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-
-    // SMOOTH SCROLL
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => {
-        const target = document.querySelector(a.getAttribute('href'));
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth' });
-        }
-      });
-    });
-
-    // COUNTER ANIMATION
-    function animateCounter(el, target, suffix = '') {
-      let current = 0;
-      const step = target / 60;
-      const timer = setInterval(() => {
-        current += step;
-        if (current >= target) {
-          current = target;
-          clearInterval(timer);
-        }
-        el.textContent = (suffix === '+' && current >= target)
-          ? Math.floor(current) + suffix
-          : Math.floor(current) + (suffix === '.' ? '' : suffix);
-      }, 16);
-    }
-    const heroObserver = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
-        document.querySelectorAll('.stat-number').forEach(el => {
-          const text = el.textContent;
-          if (text.includes('k+')) animateCounter(el, 5, 'k+');
-          else if (text.includes('anos') || text === '15') animateCounter(el, 15, '');
-          else if (text.includes('.')) { /* skip */ }
-        });
-        heroObserver.disconnect();
+    // Hero promo
+    const heroPromo = document.getElementById('hero-promo-wrap');
+    const heroPromoText = document.getElementById('hero-promo-text');
+    if(heroPromo && heroPromoText) {
+      if(settings.promo && settings.promoTitulo) {
+        heroPromoText.textContent = settings.promoTitulo + (settings.promoPor ? ` — R$ ${settings.promoPor}` : '');
+        heroPromo.style.display = 'inline-block';
+      } else {
+        heroPromo.style.display = 'none';
       }
+    }
+
+    // Opções select com preço
+    const opts = [
+      ['opt-corte', 'Corte Masculino', p.corte],
+      ['opt-barba', 'Barba Modelada', p.barba],
+      ['opt-combo', 'Combo (Corte + Barba)', p.combo],
+      ['opt-hot', 'Hot Towel Shave', p.hotshave],
+      ['opt-pigm', 'Pigmentação', p.pigm],
+      ['opt-hidrat', 'Hidratação Capilar', p.hidrat],
+    ];
+    opts.forEach(([id,label,val])=>{
+      const el = document.getElementById(id);
+      if(el) el.textContent = `${label} — R$ ${val}`;
     });
-    const heroStats = document.querySelector('.hero-stats');
-    if (heroStats) heroObserver.observe(heroStats);
-  </script>
+  }
+
+  function loadAdminFields() {
+    const p = settings.prices;
+    const setVal = (id,v) => { const el=document.getElementById(id); if(el) el.value=v; };
+    setVal('p-corte', p.corte);
+    setVal('p-barba', p.barba);
+    setVal('p-combo', p.combo);
+    setVal('p-hotshave', p.hotshave);
+    setVal('p-pigm', p.pigm);
+    setVal('p-hidrat', p.hidrat);
+    setVal('p-basico', settings.plans.basico);
+    setVal('p-premium', settings.plans.premium);
+    setVal('p-black', settings.plans.black);
+    setVal('h-abertura', settings.horario.abertura);
+    setVal('h-fechamento', settings.horario.fechamento);
+    setVal('promo-titulo', settings.promoTitulo);
+    setVal('promo-desc', settings.promoDesc);
+    setVal('promo-de', settings.promoDe);
+    setVal('promo-por', settings.promoPor);
+    setVal('promo-servico', settings.promoServico);
+    document.getElementById('toggle-chegada').checked = settings.chegada;
+    document.getElementById('toggle-promo').checked = settings.promo;
+  }
+
+  function saveAdmin() {
+    const getVal = id => { const el=document.getElementById(id); return el ? el.value : ''; };
+    settings.prices = {
+      corte: Number(getVal('p-corte')) || 0,
+      barba: Number(getVal('p-barba')) || 0,
+      combo: Number(getVal('p-combo')) || 0,
+      hotshave: Number(getVal('p-hotshave')) || 0,
+      pigm: Number(getVal('p-pigm')) || 0,
+      hidrat: Number(getVal('p-hidrat')) || 0,
+    };
+    settings.plans = {
+      basico: Number(getVal('p-basico')) || 0,
+      premium: Number(getVal('p-premium')) || 0,
+      black: Number(getVal('p-black')) || 0,
+    };
+    settings.horario = { abertura: getVal('h-abertura'), fechamento: getVal('h-fechamento') };
+    settings.promoTitulo = getVal('promo-titulo');
+    settings.promoDesc = getVal('promo-desc');
+    settings.promoDe = getVal('promo-de');
+    settings.promoPor = getVal('promo-por');
+    settings.promoServico = getVal('promo-servico');
+    settings.chegada = document.getElementById('toggle-chegada').checked;
+    settings.promo = document.getElementById('toggle-promo').checked;
+
+    localStorage.setItem('rhd_settings', JSON.stringify(settings));
+    applySettings();
+
+    const fb = document.getElementById('save-feedback');
+    fb.classList.add('show');
+    setTimeout(()=>fb.classList.remove('show'), 3000);
+  }
+
+  // ── AUTH ──
+  function openAdminLogin() {
+    document.getElementById('admin-login').classList.add('open');
+    setTimeout(()=>document.getElementById('admin-pass').focus(), 100);
+  }
+  function closeAdminLogin() {
+    document.getElementById('admin-login').classList.remove('open');
+    document.getElementById('admin-pass').value = '';
+    document.getElementById('login-err').style.display = 'none';
+  }
+  function doLogin() {
+    const pass = document.getElementById('admin-pass').value;
+    if (pass === ADMIN_PASS) {
+      closeAdminLogin();
+      document.getElementById('admin-overlay').classList.add('open');
+      loadAdminFields();
+    } else {
+      document.getElementById('login-err').style.display = 'block';
+      document.getElementById('admin-pass').value = '';
+    }
+  }
+  function closeAdmin() {
+    document.getElementById('admin-overlay').classList.remove('open');
+  }
+
+  // ── BOOKING WHATSAPP ──
+  function bookWhatsapp() {
+    if(settings.chegada) { alert('Agendamentos suspensos. Atendimento por ordem de chegada!'); return; }
+    const nome = document.getElementById('f-nome').value;
+    const tel = document.getElementById('f-tel').value;
+    const svc = document.getElementById('f-svc').value;
+    const data = document.getElementById('f-data').value;
+    const hora = document.getElementById('f-hora').value;
+    const obs = document.getElementById('f-obs').value;
+    let msg = `Olá! Vim pelo site da RHD Cortes 💈\n\n`;
+    if(nome) msg += `*Nome:* ${nome}\n`;
+    if(svc) msg += `*Serviço:* ${svc}\n`;
+    msg += `*Barbeiro:* Richard Lopes\n`;
+    if(data) msg += `*Data:* ${data}\n`;
+    if(hora) msg += `*Horário:* ${hora}\n`;
+    if(obs) msg += `*Obs:* ${obs}\n`;
+    window.open(`https://wa.me/5577999999999?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  // ── MOBILE MENU ──
+  function toggleMenu() {
+    document.getElementById('mobile-nav').classList.toggle('open');
+  }
+
+  // ── NAVBAR SCROLL ──
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', ()=>navbar.classList.toggle('scrolled', scrollY>60));
+
+  // ── FADE IN ──
+  const fiEls = document.querySelectorAll('.fi');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e,i)=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('vis'),i*60); obs.unobserve(e.target); } });
+  }, { threshold:0.1 });
+  fiEls.forEach(el=>obs.observe(el));
+
+  // Stagger dentro de grids
+  document.querySelectorAll('.services-grid .svc-card').forEach((el,i)=>el.style.transitionDelay=i*.07+'s');
+  document.querySelectorAll('.testi-grid .testi-card').forEach((el,i)=>el.style.transitionDelay=i*.1+'s');
+
+  // ── SMOOTH SCROLL ──
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      const t = document.querySelector(a.getAttribute('href'));
+      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
+    });
+  });
+
+  // ── TENTAR USAR A LOGO ENVIADA ──
+  // (Como a imagem está no servidor, substituímos pelo SVG inline estilizado com a identidade RHD)
+  // Para usar a logo real: substitua o src dos elementos nav-logo-img e hero-logo-img pelo caminho da imagem.
+
+  // ── INIT ──
+  loadSettings();
+</script>
 </body>
 </html>

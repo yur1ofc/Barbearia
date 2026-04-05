@@ -1,116 +1,84 @@
-# CorteNobre Barbearia — Site Completo 💈
+# RHD Cortes — Site Completo + Painel Admin 💈
 
-## O que está incluso
+## Acesso ao Painel Admin
 
-Um site profissional e completo para barbearia, pronto para apresentar e vender.
+**Senha padrão:** `rhd2025`
 
----
-
-## 📁 Arquivos
-
-```
-barbearia/
-└── index.html    → Site completo (único arquivo, sem dependências locais)
-```
+Para mudar a senha: abra `index.html`, procure por `ADMIN_PASS = 'rhd2025'` e troque.
 
 ---
 
-## ✅ Seções do Site
+## Como acessar o Admin
 
-| Seção | Descrição |
+1. No site, clique no botão **⚙ Admin** (canto superior direito)
+2. No celular: menu hamburguer → Admin
+3. Digite a senha: `rhd2025`
+4. Faça as alterações e clique em **💾 Salvar Todas as Alterações**
+
+---
+
+## O que o Admin controla
+
+### 🔧 Controles (ligar/desligar)
+| Toggle | O que faz |
 |---|---|
-| 🏠 **Hero** | Banner principal com foto, título impactante e botões de ação |
-| 🏆 **Sobre** | História da barbearia, diferenciais, badge de anos de experiência |
-| ✂️ **Serviços** | 6 serviços com descrição e preços |
-| 🖼️ **Galeria** | Grid fotográfico com efeito hover |
-| 👨 **Barbeiros** | Cards com foto, especialidade e redes sociais |
-| ⭐ **Avaliações** | 3 depoimentos de clientes reais |
-| 💳 **Planos** | 3 planos mensais (Essencial, Premium, Black) |
-| 📅 **Agendamento** | Formulário que abre WhatsApp com dados preenchidos |
-| 📍 **Localização** | Endereço, horários e mapa |
-| 🔗 **Footer** | Links, horários, redes sociais e copyright |
+| **Modo Ordem de Chegada** | Suspende agendamentos online, exibe aviso em vermelho no site e bloqueia o formulário |
+| **Exibir Promoção** | Ativa a seção de promoção na página |
+
+### 🎯 Promoção
+- Título, descrição, preço original, preço promocional e serviço incluído
+- Aparece como banner dourado no topo e seção dedicada
+
+### 💰 Preços dos Serviços
+- Corte Masculino
+- Barba Modelada
+- Combo (Corte + Barba)
+- Hot Towel Shave
+- Pigmentação
+- Hidratação Capilar
+
+### 🕐 Horário de Funcionamento
+- Horário de abertura e fechamento
 
 ---
 
-## 🎨 Design
+## Logo RHD
 
-- **Estilo:** Dark premium com dourado — elegante e masculino
-- **Fontes:** Playfair Display (títulos) + Barlow (corpo)
-- **Cursor personalizado** em desktops
-- **Animações** suaves de entrada (scroll reveal)
-- **Marquee** animado com os serviços
-- **100% responsivo** (mobile, tablet, desktop)
+O site usa um **SVG inline** estilizado com a identidade RHD (dourado, circular).
 
----
-
-## ⚙️ Como personalizar
-
-### Dados da barbearia
-Abra o `index.html` e substitua:
-
-```
-"CorteNobre"         → Nome da barbearia
-"Salvador - BA"      → Cidade
-"5571999999999"      → Número do WhatsApp (DDD + número, sem espaços)
-"Rua da Barra, 420"  → Endereço real
-"@cortenobre.ba"     → @Instagram
-"contato@cortenobre.com.br" → E-mail
-```
-
-### Preços
-Busque por `R$` no arquivo e atualize os valores.
-
-### Fotos
-As imagens usam Unsplash (gratuitas). Substitua as URLs por fotos reais da barbearia para melhor resultado.
-
-### Cores (variáveis CSS no topo do `<style>`)
-```css
---gold: #C9A84C;      /* dourado principal */
---black: #0A0A0A;     /* fundo escuro */
---light: #F5F0E8;     /* texto claro */
-```
+**Para usar a logo real enviada:**
+1. Salve o arquivo da logo como `logo-rhd.png` na mesma pasta
+2. No `index.html`, substitua as linhas com `data:image/svg+xml...` pelo caminho:
+   ```
+   src="logo-rhd.png"
+   ```
+   Busque por `nav-logo-img` e `hero-logo-img` no arquivo.
 
 ---
 
-## 🚀 Como publicar
+## Personalizar
 
-### Opção 1 — Gratuito (Netlify Drop)
+| O que | Onde no código |
+|---|---|
+| Número WhatsApp | Troque `5577999999999` pelo número real |
+| Senha admin | `ADMIN_PASS = 'rhd2025'` |
+| Endereço | Já está: Rua Ruy Barbosa, 405 — Centro, Barreiras BA |
+| Instagram | Já está: @rhd_cortes |
+
+---
+
+## Como publicar
+
+### Netlify (grátis — mais fácil)
 1. Acesse **netlify.com/drop**
-2. Arraste a pasta `barbearia/` para a página
-3. Site no ar em segundos com URL grátis
+2. Arraste a pasta `rhd/`
+3. Site no ar em segundos
 
-### Opção 2 — Hospedagem tradicional
-1. Faça upload do `index.html` via FTP/cPanel para a pasta `public_html/`
-2. Conecte ao domínio da barbearia
-
-### Opção 3 — GitHub Pages (grátis)
-1. Crie um repositório no GitHub
-2. Faça upload do `index.html`
-3. Ative GitHub Pages nas configurações
+### Hospedagem tradicional
+- Faça upload do `index.html` via FTP/cPanel para `public_html/`
 
 ---
 
-## 💰 Sugestão de precificação para vender
-
-| Entrega | Preço sugerido |
-|---|---|
-| Site básico (só personalizar dados) | R$ 500 – R$ 800 |
-| Site + domínio + 1 ano de hospedagem | R$ 900 – R$ 1.400 |
-| Site + configuração Google Meu Negócio | R$ 1.200 – R$ 1.800 |
-| Pacote completo + manutenção mensal | R$ 1.500 + R$ 150/mês |
-
----
-
-## 📱 Recursos técnicos
-
-- HTML5 + CSS3 + JavaScript vanilla
-- Zero dependências externas (apenas Google Fonts via CDN)
-- Cursor customizado
-- IntersectionObserver para animações
-- Formulário conectado ao WhatsApp
-- Scroll suave
-- Meta tags SEO configuradas
-
----
-
-*Site desenvolvido para portfólio e revenda. Personalize com os dados do cliente antes de entregar.*
+## Dados salvos automaticamente
+O painel admin usa **localStorage** — as configurações ficam salvas no navegador do dono. 
+Para compartilhar configurações entre dispositivos, considere upgrade para versão com backend.
