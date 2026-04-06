@@ -422,7 +422,7 @@
 <body>
 
 <!-- ── WHATSAPP ── -->
-<a href="https://wa.me/5577999999999?text=Olá!%20Vim%20pelo%20site%20e%20gostaria%20de%20agendar%20um%20horário." class="wa-float" target="_blank">📱</a>
+<a href="https://wa.me/557799143953?text=Olá!%20Vim%20pelo%20site%20e%20gostaria%20de%20agendar%20um%20horário." class="wa-float" target="_blank">📱</a>
 
 <!-- ── MOBILE MENU ── -->
 <nav id="mobile-nav" class="mobile-menu">
@@ -843,7 +843,7 @@
       </div>
       <div class="c-item">
         <div class="c-icon">📞</div>
-        <div><h4>WhatsApp</h4><p>(77) 9 9999-9999</p></div>
+        <div><h4>WhatsApp</h4><p>(77) 99914-3953</p></div>
       </div>
       <div class="c-item">
         <div class="c-icon">🕐</div>
@@ -920,7 +920,7 @@
       <p>A China dos Cortes em Barreiras. Qualidade, estilo e precisão em cada atendimento.</p>
       <div class="social-row">
         <a href="https://instagram.com/rhd_cortes" target="_blank">ig</a>
-        <a href="https://wa.me/5577999999999" target="_blank">wa</a>
+        <a href="https://wa.me/557799143953" target="_blank">wa</a>
         <a href="#">fb</a>
       </div>
     </div>
@@ -949,8 +949,17 @@
 </footer>
 
 <script>
-  // ── STATE ──
-  const ADMIN_PASS = 'rhd2025'; // SENHA PADRÃO — altere aqui
+  // ── CONFIG ──
+  const ADMIN_PASS = 'rhd2025';
+  const API_BASE = 'https://seusite.app.n8n.cloud/webhook';
+  const ENDPOINTS = {
+    agendar: `${API_BASE}/agendar-rhd`,
+    horarios: `${API_BASE}/horarios-rhd`,
+    admin: `${API_BASE}/admin-config-rhd`
+  };
+  const BARBEARIA_PHONE = '557799143953';
+  const BARBEIRO_NOME = 'Richard Lopes';
+
   let settings = {
     chegada: false,
     promo: false,
@@ -964,75 +973,216 @@
     horario: { abertura:'08:00', fechamento:'20:00' }
   };
 
-  // ── LOAD FROM STORAGE ──
-  function loadSettings() {
-    const saved = localStorage.getItem('rhd_settings');
-    if (saved) settings = JSON.parse(saved);
+  const $ = (id) => document.getElementById(id);
+  const safeNum = (v, fallback = 0) => Number.isFinite(Number(v)) ? Number(v) : fallback;
+  const fmtMoney = (v) => `R$ ${safeNum(v, 0).toFixed(0)}`;
+
+  function localKey() { return 'rhd_settings'; }
+
+  function saveLocalSettings() {
+    localStorage.setItem(localKey(), JSON.stringify(settings));
+  }
+
+  function loadLocalSettings() {
+    const saved = localStorage.getItem(localKey());
+    if (saved) {
+      try { settings = { ...settings, ...JSON.parse(saved) }; }
+      catch (e) { console.warn('Falha ao ler localStorage:', e); }
+    }
+  }
+
+  function normalizeSettings(remote = {}) {
+    const defaults = {
+      chegada: false,
+      promo: false,
+      promoTitulo: 'Promoção Especial!',
+      promoDesc: 'Aproveite nossa oferta especial por tempo limitado.',
+      promoDe: '',
+      promoPor: '',
+      promoServico: '',
+      prices: { corte:40, barba:30, combo:65, hotshave:50, pigm:60, hidrat:45 },
+      plans: { basico:89, premium:149, black:229 },
+      horario: { abertura:'08:00', fechamento:'20:00' }
+    };
+
+    settings = {
+      ...defaults,
+      ...remote,
+      prices: { ...defaults.prices, ...(remote.prices || {}) },
+      plans: { ...defaults.plans, ...(remote.plans || {}) },
+      horario: { ...defaults.horario, ...(remote.horario || {}) }
+    };
+  }
+
+  function getCurrentSettingsFromAdminFields() {
+    const getVal = id => { const el = $(id); return el ? el.value : ''; };
+    return {
+      ...settings,
+      prices: {
+        corte: safeNum(getVal('p-corte'), 0),
+        barba: safeNum(getVal('p-barba'), 0),
+        combo: safeNum(getVal('p-combo'), 0),
+        hotshave: safeNum(getVal('p-hotshave'), 0),
+        pigm: safeNum(getVal('p-pigm'), 0),
+        hidrat: safeNum(getVal('p-hidrat'), 0),
+      },
+      plans: {
+        basico: safeNum(getVal('p-basico'), 0),
+        premium: safeNum(getVal('p-premium'), 0),
+        black: safeNum(getVal('p-black'), 0),
+      },
+      horario: {
+        abertura: getVal('h-abertura') || '08:00',
+        fechamento: getVal('h-fechamento') || '20:00'
+      },
+      promoTitulo: getVal('promo-titulo'),
+      promoDesc: getVal('promo-desc'),
+      promoDe: getVal('promo-de'),
+      promoPor: getVal('promo-por'),
+      promoServico: getVal('promo-servico'),
+      chegada: $('toggle-chegada') ? $('toggle-chegada').checked : settings.chegada,
+      promo: $('toggle-promo') ? $('toggle-promo').checked : settings.promo,
+    };
+  }
+
+  function serviceKeyFromLabel(label) {
+    const clean = String(label || '').split(' — ')[0].trim().toLowerCase();
+    const map = {
+      'corte masculino': 'corte',
+      'barba modelada': 'barba',
+      'combo (corte + barba)': 'combo',
+      'hot towel shave': 'hotshave',
+      'pigmentação': 'pigm',
+      'hidratação capilar': 'hidrat'
+    };
+    return map[clean] || '';
+  }
+
+  function minutesFromHHMM(hhmm) {
+    const [h, m] = String(hhmm || '00:00').split(':').map(Number);
+    return (h * 60) + m;
+  }
+
+  function hhmmFromMinutes(total) {
+    const h = Math.floor(total / 60);
+    const m = total % 60;
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+  }
+
+  function generateFallbackSlots() {
+    const abertura = minutesFromHHMM(settings.horario.abertura || '08:00');
+    const fechamento = minutesFromHHMM(settings.horario.fechamento || '20:00');
+    const step = 30;
+    const slots = [];
+    for (let t = abertura; t < fechamento; t += step) slots.push(hhmmFromMinutes(t));
+    return slots;
+  }
+
+  function isApiConfigured() {
+    return API_BASE && !API_BASE.includes('seusite.app.n8n.cloud');
+  }
+
+  async function loadSettings() {
+    loadLocalSettings();
+
+    if (isApiConfigured()) {
+      try {
+        const res = await fetch(`${ENDPOINTS.admin}?action=get`, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.success && data.settings) {
+            normalizeSettings(data.settings);
+            saveLocalSettings();
+          } else {
+            normalizeSettings(settings);
+          }
+        } else {
+          normalizeSettings(settings);
+        }
+      } catch (e) {
+        console.warn('Falha ao carregar config remota. Mantendo local:', e);
+        normalizeSettings(settings);
+      }
+    } else {
+      normalizeSettings(settings);
+    }
+
     applySettings();
     loadAdminFields();
   }
 
-  function applySettings() {
-    // Modo chegada
-    const chegada = document.getElementById('toggle-chegada').checked || settings.chegada;
-    settings.chegada = document.getElementById('toggle-chegada')
-      ? document.getElementById('toggle-chegada').checked
-      : settings.chegada;
+  async function saveAdmin() {
+    settings = getCurrentSettingsFromAdminFields();
+    saveLocalSettings();
+    applySettings();
 
-    document.getElementById('modo-chegada-banner').classList.toggle('active', settings.chegada);
-    document.getElementById('aviso-chegada').classList.toggle('show', settings.chegada);
-    const formEl = document.getElementById('form-agendamento');
+    let savedRemote = false;
+    if (isApiConfigured()) {
+      try {
+        const res = await fetch(ENDPOINTS.admin, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(settings)
+        });
+        if (res.ok) {
+          const data = await res.json().catch(() => ({}));
+          savedRemote = !!data.success;
+        }
+      } catch (e) {
+        console.warn('Falha ao salvar no backend. Salvo localmente:', e);
+      }
+    }
+
+    const fb = $('save-feedback');
+    if (fb) {
+      fb.textContent = savedRemote ? '✓ Alterações salvas com sucesso!' : '✓ Alterações salvas localmente!';
+      fb.classList.add('show');
+      setTimeout(() => fb.classList.remove('show'), 3000);
+    }
+  }
+
+  function applySettings() {
+    if ($('toggle-chegada')) settings.chegada = $('toggle-chegada').checked;
+    if ($('toggle-promo')) settings.promo = $('toggle-promo').checked;
+
+    $('modo-chegada-banner')?.classList.toggle('active', settings.chegada);
+    $('aviso-chegada')?.classList.toggle('show', settings.chegada);
+
+    const formEl = $('form-agendamento');
     if (formEl) {
       formEl.style.opacity = settings.chegada ? '0.3' : '1';
       formEl.style.pointerEvents = settings.chegada ? 'none' : 'auto';
     }
-    const heroBtn = document.getElementById('hero-btn-agendar');
-    if (heroBtn) {
-      heroBtn.textContent = settings.chegada ? 'Ver Endereço' : 'Agendar Horário';
-    }
 
-    // Promo
-    settings.promo = document.getElementById('toggle-promo')
-      ? document.getElementById('toggle-promo').checked
-      : settings.promo;
-    document.getElementById('promocao').classList.toggle('active', settings.promo);
+    const heroBtn = $('hero-btn-agendar');
+    if (heroBtn) heroBtn.textContent = settings.chegada ? 'Ver Endereço' : 'Agendar Horário';
 
-    // Preços display
-    const p = settings.prices;
-    const fmt = v => `R$ ${Number(v).toFixed(0)}`;
-    if(document.getElementById('disp-corte')) document.getElementById('disp-corte').textContent = fmt(p.corte);
-    if(document.getElementById('disp-barba')) document.getElementById('disp-barba').textContent = fmt(p.barba);
-    if(document.getElementById('disp-combo')) document.getElementById('disp-combo').textContent = fmt(p.combo);
-    if(document.getElementById('disp-hotshave')) document.getElementById('disp-hotshave').textContent = fmt(p.hotshave);
-    if(document.getElementById('disp-pigm')) document.getElementById('disp-pigm').textContent = fmt(p.pigm);
-    if(document.getElementById('disp-hidrat')) document.getElementById('disp-hidrat').textContent = fmt(p.hidrat);
+    $('promocao')?.classList.toggle('active', settings.promo);
 
-    // Horários
-    const h = settings.horario;
-    const ab = h.abertura.replace(':','h').replace(/0$/,'');
-    const fe = h.fechamento.replace(':','h').replace(/0$/,'');
-    ['disp-abertura','disp-fechamento','disp-h-abertura','disp-h-fechamento'].forEach((id,i)=>{
-      const el = document.getElementById(id);
-      if(el) el.textContent = i%2===0 ? ab : fe;
-    });
-    const ftH = document.getElementById('ft-h');
-    if(ftH) ftH.textContent = `${ab} – ${fe}`;
+    const p = settings.prices || {};
+    if ($('disp-corte')) $('disp-corte').textContent = fmtMoney(p.corte);
+    if ($('disp-barba')) $('disp-barba').textContent = fmtMoney(p.barba);
+    if ($('disp-combo')) $('disp-combo').textContent = fmtMoney(p.combo);
+    if ($('disp-hotshave')) $('disp-hotshave').textContent = fmtMoney(p.hotshave);
+    if ($('disp-pigm')) $('disp-pigm').textContent = fmtMoney(p.pigm);
+    if ($('disp-hidrat')) $('disp-hidrat').textContent = fmtMoney(p.hidrat);
 
-    // Promo display
-    const pd = document.getElementById('promo-titulo-display');
-    if(pd) pd.textContent = settings.promoTitulo;
-    const pdd = document.getElementById('promo-desc-display');
-    if(pdd) pdd.textContent = settings.promoDesc;
-    const pde = document.getElementById('promo-de-display');
-    if(pde) pde.textContent = settings.promoDe ? `R$ ${settings.promoDe}` : '';
-    const ppe = document.getElementById('promo-por-display');
-    if(ppe) ppe.textContent = settings.promoPor ? `R$ ${settings.promoPor}` : '—';
+    const h = settings.horario || { abertura: '08:00', fechamento: '20:00' };
+    const ab = String(h.abertura || '08:00').replace(':', 'h').replace(/0$/, '');
+    const fe = String(h.fechamento || '20:00').replace(':', 'h').replace(/0$/, '');
+    ['disp-abertura','disp-h-abertura'].forEach(id => { if ($(id)) $(id).textContent = ab; });
+    ['disp-fechamento','disp-h-fechamento'].forEach(id => { if ($(id)) $(id).textContent = fe; });
+    if ($('ft-h')) $('ft-h').textContent = `${ab} – ${fe}`;
 
-    // Hero promo
-    const heroPromo = document.getElementById('hero-promo-wrap');
-    const heroPromoText = document.getElementById('hero-promo-text');
-    if(heroPromo && heroPromoText) {
-      if(settings.promo && settings.promoTitulo) {
+    if ($('promo-titulo-display')) $('promo-titulo-display').textContent = settings.promoTitulo || 'Promoção Especial!';
+    if ($('promo-desc-display')) $('promo-desc-display').textContent = settings.promoDesc || '';
+    if ($('promo-de-display')) $('promo-de-display').textContent = settings.promoDe ? `R$ ${settings.promoDe}` : '';
+    if ($('promo-por-display')) $('promo-por-display').textContent = settings.promoPor ? `R$ ${settings.promoPor}` : '—';
+
+    const heroPromo = $('hero-promo-wrap');
+    const heroPromoText = $('hero-promo-text');
+    if (heroPromo && heroPromoText) {
+      if (settings.promo && settings.promoTitulo) {
         heroPromoText.textContent = settings.promoTitulo + (settings.promoPor ? ` — R$ ${settings.promoPor}` : '');
         heroPromo.style.display = 'inline-block';
       } else {
@@ -1040,7 +1190,6 @@
       }
     }
 
-    // Opções select com preço
     const opts = [
       ['opt-corte', 'Corte Masculino', p.corte],
       ['opt-barba', 'Barba Modelada', p.barba],
@@ -1049,144 +1198,238 @@
       ['opt-pigm', 'Pigmentação', p.pigm],
       ['opt-hidrat', 'Hidratação Capilar', p.hidrat],
     ];
-    opts.forEach(([id,label,val])=>{
-      const el = document.getElementById(id);
-      if(el) el.textContent = `${label} — R$ ${val}`;
+    opts.forEach(([id, label, val]) => {
+      if ($(id)) $(id).textContent = `${label} — ${fmtMoney(val)}`;
     });
   }
 
   function loadAdminFields() {
-    const p = settings.prices;
-    const setVal = (id,v) => { const el=document.getElementById(id); if(el) el.value=v; };
+    const p = settings.prices || {};
+    const setVal = (id, v) => { if ($(id)) $(id).value = v ?? ''; };
+
     setVal('p-corte', p.corte);
     setVal('p-barba', p.barba);
     setVal('p-combo', p.combo);
     setVal('p-hotshave', p.hotshave);
     setVal('p-pigm', p.pigm);
     setVal('p-hidrat', p.hidrat);
-    setVal('p-basico', settings.plans.basico);
-    setVal('p-premium', settings.plans.premium);
-    setVal('p-black', settings.plans.black);
-    setVal('h-abertura', settings.horario.abertura);
-    setVal('h-fechamento', settings.horario.fechamento);
+
+    setVal('p-basico', settings.plans?.basico);
+    setVal('p-premium', settings.plans?.premium);
+    setVal('p-black', settings.plans?.black);
+
+    setVal('h-abertura', settings.horario?.abertura);
+    setVal('h-fechamento', settings.horario?.fechamento);
+
     setVal('promo-titulo', settings.promoTitulo);
     setVal('promo-desc', settings.promoDesc);
     setVal('promo-de', settings.promoDe);
     setVal('promo-por', settings.promoPor);
     setVal('promo-servico', settings.promoServico);
-    document.getElementById('toggle-chegada').checked = settings.chegada;
-    document.getElementById('toggle-promo').checked = settings.promo;
+
+    if ($('toggle-chegada')) $('toggle-chegada').checked = !!settings.chegada;
+    if ($('toggle-promo')) $('toggle-promo').checked = !!settings.promo;
   }
 
-  function saveAdmin() {
-    const getVal = id => { const el=document.getElementById(id); return el ? el.value : ''; };
-    settings.prices = {
-      corte: Number(getVal('p-corte')) || 0,
-      barba: Number(getVal('p-barba')) || 0,
-      combo: Number(getVal('p-combo')) || 0,
-      hotshave: Number(getVal('p-hotshave')) || 0,
-      pigm: Number(getVal('p-pigm')) || 0,
-      hidrat: Number(getVal('p-hidrat')) || 0,
-    };
-    settings.plans = {
-      basico: Number(getVal('p-basico')) || 0,
-      premium: Number(getVal('p-premium')) || 0,
-      black: Number(getVal('p-black')) || 0,
-    };
-    settings.horario = { abertura: getVal('h-abertura'), fechamento: getVal('h-fechamento') };
-    settings.promoTitulo = getVal('promo-titulo');
-    settings.promoDesc = getVal('promo-desc');
-    settings.promoDe = getVal('promo-de');
-    settings.promoPor = getVal('promo-por');
-    settings.promoServico = getVal('promo-servico');
-    settings.chegada = document.getElementById('toggle-chegada').checked;
-    settings.promo = document.getElementById('toggle-promo').checked;
-
-    localStorage.setItem('rhd_settings', JSON.stringify(settings));
-    applySettings();
-
-    const fb = document.getElementById('save-feedback');
-    fb.classList.add('show');
-    setTimeout(()=>fb.classList.remove('show'), 3000);
-  }
-
-  // ── AUTH ──
   function openAdminLogin() {
-    document.getElementById('admin-login').classList.add('open');
-    setTimeout(()=>document.getElementById('admin-pass').focus(), 100);
+    $('admin-login')?.classList.add('open');
+    setTimeout(() => $('admin-pass')?.focus(), 100);
   }
+
   function closeAdminLogin() {
-    document.getElementById('admin-login').classList.remove('open');
-    document.getElementById('admin-pass').value = '';
-    document.getElementById('login-err').style.display = 'none';
+    $('admin-login')?.classList.remove('open');
+    if ($('admin-pass')) $('admin-pass').value = '';
+    if ($('login-err')) $('login-err').style.display = 'none';
   }
+
   function doLogin() {
-    const pass = document.getElementById('admin-pass').value;
+    const pass = $('admin-pass') ? $('admin-pass').value : '';
     if (pass === ADMIN_PASS) {
       closeAdminLogin();
-      document.getElementById('admin-overlay').classList.add('open');
+      $('admin-overlay')?.classList.add('open');
       loadAdminFields();
-    } else {
-      document.getElementById('login-err').style.display = 'block';
-      document.getElementById('admin-pass').value = '';
+    } else if ($('login-err')) {
+      $('login-err').style.display = 'block';
+      if ($('admin-pass')) $('admin-pass').value = '';
     }
   }
+
   function closeAdmin() {
-    document.getElementById('admin-overlay').classList.remove('open');
+    $('admin-overlay')?.classList.remove('open');
   }
 
-  // ── BOOKING WHATSAPP ──
-  function bookWhatsapp() {
-    if(settings.chegada) { alert('Agendamentos suspensos. Atendimento por ordem de chegada!'); return; }
-    const nome = document.getElementById('f-nome').value;
-    const tel = document.getElementById('f-tel').value;
-    const svc = document.getElementById('f-svc').value;
-    const data = document.getElementById('f-data').value;
-    const hora = document.getElementById('f-hora').value;
-    const obs = document.getElementById('f-obs').value;
+  async function carregarHorariosDisponiveis() {
+    const data = $('f-data')?.value;
+    const svcLabel = $('f-svc')?.value;
+    const select = $('f-hora');
+
+    if (!select || !data || !svcLabel) return;
+    select.innerHTML = '<option value="">Carregando...</option>';
+
+    if (isApiConfigured()) {
+      try {
+        const servico = svcLabel.split(' — ')[0].trim();
+        const res = await fetch(`${ENDPOINTS.horarios}?data=${encodeURIComponent(data)}&servico=${encodeURIComponent(servico)}`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && Array.isArray(json.horarios) && json.horarios.length) {
+            select.innerHTML = '<option value="">Escolha</option>';
+            json.horarios.forEach(h => {
+              const opt = document.createElement('option');
+              opt.value = h;
+              opt.textContent = h;
+              select.appendChild(opt);
+            });
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('Falha ao carregar horários do backend:', e);
+      }
+    }
+
+    const slots = generateFallbackSlots();
+    select.innerHTML = '<option value="">Escolha</option>';
+    slots.forEach(h => {
+      const opt = document.createElement('option');
+      opt.value = h;
+      opt.textContent = h;
+      select.appendChild(opt);
+    });
+  }
+
+  async function bookWhatsapp() {
+    if (settings.chegada) {
+      alert('Agendamentos suspensos. Atendimento por ordem de chegada!');
+      return;
+    }
+
+    const nome = $('f-nome')?.value.trim() || '';
+    const tel = ($('f-tel')?.value || '').replace(/\D/g, '');
+    const svcLabel = $('f-svc')?.value || '';
+    const data = $('f-data')?.value || '';
+    const hora = $('f-hora')?.value || '';
+    const obs = $('f-obs')?.value || '';
+
+    if (!nome || !tel || !svcLabel || !data || !hora) {
+      alert('Preencha nome, WhatsApp, serviço, data e horário.');
+      return;
+    }
+
+    const btn = document.querySelector('.btn-book');
+    const oldText = btn ? btn.textContent : '';
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+    }
+
+    const servicoNome = svcLabel.split(' — ')[0].trim();
+    const servicoKey = serviceKeyFromLabel(svcLabel);
+
+    if (isApiConfigured()) {
+      try {
+        const res = await fetch(ENDPOINTS.agendar, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nome,
+            telefone: tel,
+            servicoKey,
+            servicoNome,
+            barbeiro: BARBEIRO_NOME,
+            data,
+            hora,
+            observacoes: obs,
+            origem: 'site'
+          })
+        });
+
+        const json = await res.json().catch(() => ({}));
+        if (res.ok && json.success) {
+          alert(json.message || 'Agendamento confirmado com sucesso!');
+          if ($('f-nome')) $('f-nome').value = '';
+          if ($('f-tel')) $('f-tel').value = '';
+          if ($('f-svc')) $('f-svc').value = '';
+          if ($('f-data')) $('f-data').value = '';
+          if ($('f-hora')) $('f-hora').innerHTML = '<option value="">Escolha</option>';
+          if ($('f-obs')) $('f-obs').value = '';
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = oldText;
+          }
+          return;
+        }
+
+        if (json && json.message) {
+          alert(json.message);
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = oldText;
+          }
+          return;
+        }
+      } catch (e) {
+        console.warn('Falha no backend, usando fallback WhatsApp:', e);
+      }
+    }
+
     let msg = `Olá! Vim pelo site da RHD Cortes 💈\n\n`;
-    if(nome) msg += `*Nome:* ${nome}\n`;
-    if(svc) msg += `*Serviço:* ${svc}\n`;
-    msg += `*Barbeiro:* Richard Lopes\n`;
-    if(data) msg += `*Data:* ${data}\n`;
-    if(hora) msg += `*Horário:* ${hora}\n`;
-    if(obs) msg += `*Obs:* ${obs}\n`;
-    window.open(`https://wa.me/5577999999999?text=${encodeURIComponent(msg)}`, '_blank');
+    msg += `*Nome:* ${nome}\n`;
+    msg += `*Serviço:* ${servicoNome}\n`;
+    msg += `*Barbeiro:* ${BARBEIRO_NOME}\n`;
+    msg += `*Data:* ${data}\n`;
+    msg += `*Horário:* ${hora}\n`;
+    if (obs) msg += `*Obs:* ${obs}\n`;
+
+    window.open(`https://wa.me/${BARBEARIA_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
+
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = oldText;
+    }
   }
 
-  // ── MOBILE MENU ──
   function toggleMenu() {
-    document.getElementById('mobile-nav').classList.toggle('open');
+    $('mobile-nav')?.classList.toggle('open');
   }
 
-  // ── NAVBAR SCROLL ──
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', ()=>navbar.classList.toggle('scrolled', scrollY>60));
+  const navbar = $('navbar');
+  if (navbar) {
+    window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 60));
+  }
 
-  // ── FADE IN ──
   const fiEls = document.querySelectorAll('.fi');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach((e,i)=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('vis'),i*60); obs.unobserve(e.target); } });
-  }, { threshold:0.1 });
-  fiEls.forEach(el=>obs.observe(el));
+  if ('IntersectionObserver' in window && fiEls.length) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('vis'), i * 60);
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    fiEls.forEach(el => io.observe(el));
+  } else {
+    fiEls.forEach(el => el.classList.add('vis'));
+  }
 
-  // Stagger dentro de grids
-  document.querySelectorAll('.services-grid .svc-card').forEach((el,i)=>el.style.transitionDelay=i*.07+'s');
-  document.querySelectorAll('.testi-grid .testi-card').forEach((el,i)=>el.style.transitionDelay=i*.1+'s');
+  document.querySelectorAll('.services-grid .svc-card').forEach((el, i) => el.style.transitionDelay = (i * 0.07) + 's');
+  document.querySelectorAll('.testi-grid .testi-card').forEach((el, i) => el.style.transitionDelay = (i * 0.1) + 's');
 
-  // ── SMOOTH SCROLL ──
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click',e=>{
-      const t = document.querySelector(a.getAttribute('href'));
-      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const href = a.getAttribute('href');
+      const t = href ? document.querySelector(href) : null;
+      if (t) {
+        e.preventDefault();
+        t.scrollIntoView({ behavior: 'smooth' });
+      }
     });
   });
 
-  // ── TENTAR USAR A LOGO ENVIADA ──
-  // (Como a imagem está no servidor, substituímos pelo SVG inline estilizado com a identidade RHD)
-  // Para usar a logo real: substitua o src dos elementos nav-logo-img e hero-logo-img pelo caminho da imagem.
+  $('f-data')?.addEventListener('change', carregarHorariosDisponiveis);
+  $('f-svc')?.addEventListener('change', carregarHorariosDisponiveis);
 
-  // ── INIT ──
   loadSettings();
 </script>
 </body>
