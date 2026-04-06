@@ -949,245 +949,245 @@
 </footer>
 
 <script>
-  // ── STATE ──
-  const ADMIN_PASS = 'rhd2025'; // SENHA PADRÃO — altere aqui
-  let settings = {
-    chegada: false,
-    promo: false,
-    promoTitulo: 'Promoção Especial!',
-    promoDesc: 'Aproveite nossa oferta especial por tempo limitado.',
-    promoDe: '',
-    promoPor: '',
-    promoServico: '',
-    prices: { corte:40, barba:30, combo:65, hotshave:50, pigm:60, hidrat:45 },
-    plans: { basico:89, premium:149, black:229 },
-    horario: { abertura:'08:00', fechamento:'20:00' }
+  <script>
+/* ================= CONFIG ================= */
+
+const API_BASE = 'https://seusite.app.n8n.cloud/webhook';
+
+const ENDPOINTS = {
+  agendar: `${API_BASE}/agendar-rhd`,
+  horarios: `${API_BASE}/horarios-rhd`,
+  admin: `${API_BASE}/admin-config-rhd`
+};
+
+let settings = {
+  chegada: false,
+  promo: false,
+  promoTitulo: '',
+  promoDesc: '',
+  promoDe: '',
+  promoPor: '',
+  promoServico: '',
+  prices: {},
+  plans: {},
+  horario: {
+    abertura: "08:00",
+    fechamento: "20:00"
+  }
+};
+
+/* ================= INIT ================= */
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadSettings();
+});
+
+/* ================= LOAD SETTINGS ================= */
+
+async function loadSettings() {
+  try {
+    const res = await fetch(`${ENDPOINTS.admin}?action=get`);
+    const data = await res.json();
+
+    if (data.success && data.settings) {
+      settings = data.settings;
+    }
+  } catch (e) {
+    console.log('Erro ao carregar config remota, usando local');
+  }
+
+  applySettings();
+  loadAdminFields();
+}
+
+/* ================= APPLY SETTINGS ================= */
+
+function applySettings() {
+  // Promoção
+  const promoBox = document.querySelector('.promo-box');
+  if (promoBox) {
+    promoBox.style.display = settings.promo ? 'block' : 'none';
+    promoBox.innerHTML = `
+      <h3>${settings.promoTitulo || ''}</h3>
+      <p>${settings.promoDesc || ''}</p>
+      <strong>${settings.promoDe || ''} → ${settings.promoPor || ''}</strong>
+    `;
+  }
+
+  // Ordem de chegada
+  const aviso = document.getElementById('aviso-chegada');
+  if (aviso) {
+    aviso.style.display = settings.chegada ? 'block' : 'none';
+  }
+}
+
+/* ================= ADMIN ================= */
+
+function loadAdminFields() {
+  const setVal = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val || '';
   };
 
-  // ── LOAD FROM STORAGE ──
-  function loadSettings() {
-    const saved = localStorage.getItem('rhd_settings');
-    if (saved) settings = JSON.parse(saved);
-    applySettings();
-    loadAdminFields();
-  }
+  setVal('h-abertura', settings.horario?.abertura);
+  setVal('h-fechamento', settings.horario?.fechamento);
 
-  function applySettings() {
-    // Modo chegada
-    const chegada = document.getElementById('toggle-chegada').checked || settings.chegada;
-    settings.chegada = document.getElementById('toggle-chegada')
-      ? document.getElementById('toggle-chegada').checked
-      : settings.chegada;
+  document.getElementById('toggle-chegada')?.checked = settings.chegada;
+  document.getElementById('toggle-promo')?.checked = settings.promo;
 
-    document.getElementById('modo-chegada-banner').classList.toggle('active', settings.chegada);
-    document.getElementById('aviso-chegada').classList.toggle('show', settings.chegada);
-    const formEl = document.getElementById('form-agendamento');
-    if (formEl) {
-      formEl.style.opacity = settings.chegada ? '0.3' : '1';
-      formEl.style.pointerEvents = settings.chegada ? 'none' : 'auto';
-    }
-    const heroBtn = document.getElementById('hero-btn-agendar');
-    if (heroBtn) {
-      heroBtn.textContent = settings.chegada ? 'Ver Endereço' : 'Agendar Horário';
-    }
+  setVal('promo-titulo', settings.promoTitulo);
+  setVal('promo-desc', settings.promoDesc);
+  setVal('promo-de', settings.promoDe);
+  setVal('promo-por', settings.promoPor);
+  setVal('promo-servico', settings.promoServico);
+}
 
-    // Promo
-    settings.promo = document.getElementById('toggle-promo')
-      ? document.getElementById('toggle-promo').checked
-      : settings.promo;
-    document.getElementById('promocao').classList.toggle('active', settings.promo);
+async function saveAdmin() {
+  const get = id => document.getElementById(id)?.value || '';
 
-    // Preços display
-    const p = settings.prices;
-    const fmt = v => `R$ ${Number(v).toFixed(0)}`;
-    if(document.getElementById('disp-corte')) document.getElementById('disp-corte').textContent = fmt(p.corte);
-    if(document.getElementById('disp-barba')) document.getElementById('disp-barba').textContent = fmt(p.barba);
-    if(document.getElementById('disp-combo')) document.getElementById('disp-combo').textContent = fmt(p.combo);
-    if(document.getElementById('disp-hotshave')) document.getElementById('disp-hotshave').textContent = fmt(p.hotshave);
-    if(document.getElementById('disp-pigm')) document.getElementById('disp-pigm').textContent = fmt(p.pigm);
-    if(document.getElementById('disp-hidrat')) document.getElementById('disp-hidrat').textContent = fmt(p.hidrat);
+  settings.horario = {
+    abertura: get('h-abertura'),
+    fechamento: get('h-fechamento')
+  };
 
-    // Horários
-    const h = settings.horario;
-    const ab = h.abertura.replace(':','h').replace(/0$/,'');
-    const fe = h.fechamento.replace(':','h').replace(/0$/,'');
-    ['disp-abertura','disp-fechamento','disp-h-abertura','disp-h-fechamento'].forEach((id,i)=>{
-      const el = document.getElementById(id);
-      if(el) el.textContent = i%2===0 ? ab : fe;
+  settings.chegada = document.getElementById('toggle-chegada').checked;
+  settings.promo = document.getElementById('toggle-promo').checked;
+
+  settings.promoTitulo = get('promo-titulo');
+  settings.promoDesc = get('promo-desc');
+  settings.promoDe = get('promo-de');
+  settings.promoPor = get('promo-por');
+  settings.promoServico = get('promo-servico');
+
+  try {
+    const res = await fetch(ENDPOINTS.admin, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(settings)
     });
-    const ftH = document.getElementById('ft-h');
-    if(ftH) ftH.textContent = `${ab} – ${fe}`;
 
-    // Promo display
-    const pd = document.getElementById('promo-titulo-display');
-    if(pd) pd.textContent = settings.promoTitulo;
-    const pdd = document.getElementById('promo-desc-display');
-    if(pdd) pdd.textContent = settings.promoDesc;
-    const pde = document.getElementById('promo-de-display');
-    if(pde) pde.textContent = settings.promoDe ? `R$ ${settings.promoDe}` : '';
-    const ppe = document.getElementById('promo-por-display');
-    if(ppe) ppe.textContent = settings.promoPor ? `R$ ${settings.promoPor}` : '—';
+    const data = await res.json();
 
-    // Hero promo
-    const heroPromo = document.getElementById('hero-promo-wrap');
-    const heroPromoText = document.getElementById('hero-promo-text');
-    if(heroPromo && heroPromoText) {
-      if(settings.promo && settings.promoTitulo) {
-        heroPromoText.textContent = settings.promoTitulo + (settings.promoPor ? ` — R$ ${settings.promoPor}` : '');
-        heroPromo.style.display = 'inline-block';
-      } else {
-        heroPromo.style.display = 'none';
-      }
+    if (!data.success) {
+      alert('Erro ao salvar');
+      return;
     }
 
-    // Opções select com preço
-    const opts = [
-      ['opt-corte', 'Corte Masculino', p.corte],
-      ['opt-barba', 'Barba Modelada', p.barba],
-      ['opt-combo', 'Combo (Corte + Barba)', p.combo],
-      ['opt-hot', 'Hot Towel Shave', p.hotshave],
-      ['opt-pigm', 'Pigmentação', p.pigm],
-      ['opt-hidrat', 'Hidratação Capilar', p.hidrat],
-    ];
-    opts.forEach(([id,label,val])=>{
-      const el = document.getElementById(id);
-      if(el) el.textContent = `${label} — R$ ${val}`;
-    });
-  }
-
-  function loadAdminFields() {
-    const p = settings.prices;
-    const setVal = (id,v) => { const el=document.getElementById(id); if(el) el.value=v; };
-    setVal('p-corte', p.corte);
-    setVal('p-barba', p.barba);
-    setVal('p-combo', p.combo);
-    setVal('p-hotshave', p.hotshave);
-    setVal('p-pigm', p.pigm);
-    setVal('p-hidrat', p.hidrat);
-    setVal('p-basico', settings.plans.basico);
-    setVal('p-premium', settings.plans.premium);
-    setVal('p-black', settings.plans.black);
-    setVal('h-abertura', settings.horario.abertura);
-    setVal('h-fechamento', settings.horario.fechamento);
-    setVal('promo-titulo', settings.promoTitulo);
-    setVal('promo-desc', settings.promoDesc);
-    setVal('promo-de', settings.promoDe);
-    setVal('promo-por', settings.promoPor);
-    setVal('promo-servico', settings.promoServico);
-    document.getElementById('toggle-chegada').checked = settings.chegada;
-    document.getElementById('toggle-promo').checked = settings.promo;
-  }
-
-  function saveAdmin() {
-    const getVal = id => { const el=document.getElementById(id); return el ? el.value : ''; };
-    settings.prices = {
-      corte: Number(getVal('p-corte')) || 0,
-      barba: Number(getVal('p-barba')) || 0,
-      combo: Number(getVal('p-combo')) || 0,
-      hotshave: Number(getVal('p-hotshave')) || 0,
-      pigm: Number(getVal('p-pigm')) || 0,
-      hidrat: Number(getVal('p-hidrat')) || 0,
-    };
-    settings.plans = {
-      basico: Number(getVal('p-basico')) || 0,
-      premium: Number(getVal('p-premium')) || 0,
-      black: Number(getVal('p-black')) || 0,
-    };
-    settings.horario = { abertura: getVal('h-abertura'), fechamento: getVal('h-fechamento') };
-    settings.promoTitulo = getVal('promo-titulo');
-    settings.promoDesc = getVal('promo-desc');
-    settings.promoDe = getVal('promo-de');
-    settings.promoPor = getVal('promo-por');
-    settings.promoServico = getVal('promo-servico');
-    settings.chegada = document.getElementById('toggle-chegada').checked;
-    settings.promo = document.getElementById('toggle-promo').checked;
-
-    localStorage.setItem('rhd_settings', JSON.stringify(settings));
     applySettings();
 
     const fb = document.getElementById('save-feedback');
-    fb.classList.add('show');
-    setTimeout(()=>fb.classList.remove('show'), 3000);
-  }
-
-  // ── AUTH ──
-  function openAdminLogin() {
-    document.getElementById('admin-login').classList.add('open');
-    setTimeout(()=>document.getElementById('admin-pass').focus(), 100);
-  }
-  function closeAdminLogin() {
-    document.getElementById('admin-login').classList.remove('open');
-    document.getElementById('admin-pass').value = '';
-    document.getElementById('login-err').style.display = 'none';
-  }
-  function doLogin() {
-    const pass = document.getElementById('admin-pass').value;
-    if (pass === ADMIN_PASS) {
-      closeAdminLogin();
-      document.getElementById('admin-overlay').classList.add('open');
-      loadAdminFields();
-    } else {
-      document.getElementById('login-err').style.display = 'block';
-      document.getElementById('admin-pass').value = '';
+    if (fb) {
+      fb.classList.add('show');
+      setTimeout(() => fb.classList.remove('show'), 3000);
     }
+
+  } catch (e) {
+    alert('Erro de conexão');
   }
-  function closeAdmin() {
-    document.getElementById('admin-overlay').classList.remove('open');
-  }
+}
 
-  // ── BOOKING WHATSAPP ──
-  function bookWhatsapp() {
-    if(settings.chegada) { alert('Agendamentos suspensos. Atendimento por ordem de chegada!'); return; }
-    const nome = document.getElementById('f-nome').value;
-    const tel = document.getElementById('f-tel').value;
-    const svc = document.getElementById('f-svc').value;
-    const data = document.getElementById('f-data').value;
-    const hora = document.getElementById('f-hora').value;
-    const obs = document.getElementById('f-obs').value;
-    let msg = `Olá! Vim pelo site da RHD Cortes 💈\n\n`;
-    if(nome) msg += `*Nome:* ${nome}\n`;
-    if(svc) msg += `*Serviço:* ${svc}\n`;
-    msg += `*Barbeiro:* Richard Lopes\n`;
-    if(data) msg += `*Data:* ${data}\n`;
-    if(hora) msg += `*Horário:* ${hora}\n`;
-    if(obs) msg += `*Obs:* ${obs}\n`;
-    window.open(`https://wa.me/5577999999999?text=${encodeURIComponent(msg)}`, '_blank');
-  }
+/* ================= HORÁRIOS ================= */
 
-  // ── MOBILE MENU ──
-  function toggleMenu() {
-    document.getElementById('mobile-nav').classList.toggle('open');
-  }
+async function carregarHorariosDisponiveis() {
+  const data = document.getElementById('f-data').value;
+  const svc = document.getElementById('f-svc').value;
+  const select = document.getElementById('f-hora');
 
-  // ── NAVBAR SCROLL ──
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', ()=>navbar.classList.toggle('scrolled', scrollY>60));
+  if (!data || !svc) return;
 
-  // ── FADE IN ──
-  const fiEls = document.querySelectorAll('.fi');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach((e,i)=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('vis'),i*60); obs.unobserve(e.target); } });
-  }, { threshold:0.1 });
-  fiEls.forEach(el=>obs.observe(el));
+  select.innerHTML = '<option>Carregando...</option>';
 
-  // Stagger dentro de grids
-  document.querySelectorAll('.services-grid .svc-card').forEach((el,i)=>el.style.transitionDelay=i*.07+'s');
-  document.querySelectorAll('.testi-grid .testi-card').forEach((el,i)=>el.style.transitionDelay=i*.1+'s');
+  try {
+    const res = await fetch(`${ENDPOINTS.horarios}?data=${data}&servico=${encodeURIComponent(svc)}`);
+    const json = await res.json();
 
-  // ── SMOOTH SCROLL ──
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click',e=>{
-      const t = document.querySelector(a.getAttribute('href'));
-      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
+    if (!json.success || !json.horarios.length) {
+      select.innerHTML = '<option>Sem horários</option>';
+      return;
+    }
+
+    select.innerHTML = '<option>Escolha</option>';
+
+    json.horarios.forEach(h => {
+      const opt = document.createElement('option');
+      opt.value = h;
+      opt.textContent = h;
+      select.appendChild(opt);
     });
-  });
 
-  // ── TENTAR USAR A LOGO ENVIADA ──
-  // (Como a imagem está no servidor, substituímos pelo SVG inline estilizado com a identidade RHD)
-  // Para usar a logo real: substitua o src dos elementos nav-logo-img e hero-logo-img pelo caminho da imagem.
+  } catch (e) {
+    select.innerHTML = '<option>Erro</option>';
+  }
+}
 
-  // ── INIT ──
-  loadSettings();
+document.getElementById('f-data')?.addEventListener('change', carregarHorariosDisponiveis);
+document.getElementById('f-svc')?.addEventListener('change', carregarHorariosDisponiveis);
+
+/* ================= AGENDAMENTO ================= */
+
+async function bookWhatsapp() {
+  if (settings.chegada) {
+    alert('Atendimento por ordem de chegada ativo.');
+    return;
+  }
+
+  const nome = document.getElementById('f-nome').value.trim();
+  const tel = document.getElementById('f-tel').value.replace(/\D/g, '');
+  const servico = document.getElementById('f-svc').value;
+  const data = document.getElementById('f-data').value;
+  const hora = document.getElementById('f-hora').value;
+  const obs = document.getElementById('f-obs').value;
+
+  if (!nome || !tel || !servico || !data || !hora) {
+    alert('Preencha todos os campos');
+    return;
+  }
+
+  const btn = document.querySelector('.btn-book');
+  const old = btn.textContent;
+
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+
+  try {
+    const res = await fetch(ENDPOINTS.agendar, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nome,
+        telefone: tel,
+        servicoNome: servico,
+        data,
+        hora,
+        observacoes: obs,
+        origem: 'site'
+      })
+    });
+
+    const json = await res.json();
+
+    if (!json.success) {
+      alert(json.message || 'Erro ao agendar');
+      return;
+    }
+
+    alert('Agendamento confirmado');
+
+    document.getElementById('f-nome').value = '';
+    document.getElementById('f-tel').value = '';
+    document.getElementById('f-svc').value = '';
+    document.getElementById('f-data').value = '';
+    document.getElementById('f-hora').innerHTML = '<option>Escolha</option>';
+    document.getElementById('f-obs').value = '';
+
+  } catch (e) {
+    alert('Erro de conexão');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = old;
+  }
+}
+</script>
 </script>
 </body>
 </html>
